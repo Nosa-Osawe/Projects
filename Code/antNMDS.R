@@ -4,7 +4,7 @@ library(tidyverse)
 library(vegan)
 library(corrplot)
 
-antdiversitynmds <- read.csv("C:\\Users\\user\\Desktop\\antdiversitynmds.csv")
+antdiversitynmds <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\antdiversitynmds.csv")
 view(antdiversitynmds)
 dim(antdiversitynmds)
 #subset_plantNMDS <- PlantNMDS %>% filter(Samples == "Sample1")
@@ -38,7 +38,7 @@ corrplot(cor(antNMDS$points, antdata1),  method ='color',
 
 ###################################################################################
 
-anttt <- read.csv("C:\\Users\\user\\Desktop\\anttttttttttttt.csv")
+anttt <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\anttttttttttttt.csv")
 view(anttt)
 dim(anttt)
 #subset_plantNMDS <- PlantNMDS %>% filter(Samples == "Sample1")

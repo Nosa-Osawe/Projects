@@ -5,7 +5,7 @@ install.packages("vegan")
 install.packages("pairwiseAdonis")
 library(vegan)
 library(corrplot)
-PlantNMDS <- read.csv("C:\\Users\\user\\Desktop\\plantNMDS.csv")
+PlantNMDS <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\plantNMDS.csv")
 View(PlantNMDS)
 #subset_plantNMDS <- PlantNMDS %>% filter(Samples == "Sample1")
 #subset_plantNMDS <- PlantNMDS[PlantNMDS$Samples %in% c("Sampling1", "Sampling5"), ]
