@@ -7,6 +7,7 @@ library(FSA)
 
 ant <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\ants4T.csv") # load data
 View(ant)
+head(ant)
     #convert wide data to long data
 antT <- gather(ant, Pitfall, NumOfCatch, P1:P12,factor_key=TRUE ) 
 View(antT)
