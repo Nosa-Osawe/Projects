@@ -20,16 +20,20 @@ antNMDS_df <- as.data.frame(antNMDS$points)
 antfit <- adonis(antdata1~Month, data = antdata2, permutations = 666, method = "bray")
 antfit
 # adonis2 is recommended 
-antfit2 <- adonis2 (antdata1~Month, data = antdata2, permutations = 666, method = "bray")
+antfit2 <- adonis2 (antdata1~Month, data = antdata2, permutations = 9999, method = "bray")
 antfit2
 
 ggplot(antdiversitynmds, aes(x = antNMDS_df$MDS1, y = antNMDS_df$MDS2, color = Month)) +
   geom_point(size = 3) +  # Customize the point size
   labs(x = "NMDS1", y = "NMDS2") +  # Set axis labels
-  scale_color_manual(values = c("January" = "red", "February" = "green", "March" = "blue",
-                                "April" = "orange")) +  # Specify colors
+  scale_color_manual(values = c("January" = "red", "February" = "green", "March" = "lightblue",
+                                "April" = "purple")) +  # Specify colors
   theme_minimal()+
-  stat_ellipse(geom = "polygon", aes(group = Month), level = 0.95, fill = "transparent")
+  stat_ellipse(geom = "polygon", aes(group = Month), level = 0.95, fill = "transparent")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
+  )+
+  theme_classic()
 
 corrplot(cor(antNMDS$points, antdata1),  method ='color',
          addCoef.col='black',

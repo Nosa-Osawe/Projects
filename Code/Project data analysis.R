@@ -145,6 +145,7 @@ plant <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Plant_
 plant$Date <- as.Date(plant$Date, format = "%d/%m/%Y")
 ggplot(plant, aes(x = Date , y = Percentage.cover, fill = Species)) +
   geom_bar(stat = "identity")+
+  scale_fill_manual(values = custom_colors) +  # Set custom colors using scale_fill_manual
   theme_classic()
  
 # use ' + coord_flip()' to flip the axis
@@ -153,16 +154,16 @@ ggplot(plant, aes(x = Date , y = Percentage.cover, fill = Species)) +
 plantareachart <-ggplot(plant, aes(x= Date,y= Percentage.cover,fill = Species)) +
   geom_area(position = "stack", linejoin = "round")+
   labs(x = "Month", y = "Plant cover (%)", fill = "Species")+
-  scale_fill_discrete()+
+  scale_fill_manual(values = custom_colors) +  # Set custom colors using scale_fill_manual
   theme_classic()+
   theme(text = element_text(family = "Times New Roman"))
 plantareachart
 
 
 # Define your custom color palette
-custom_colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-                   "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", 
-                   "#33312E", "#FF00FF")  # Replace with your desired colors
+custom_colors <- c("#8c564b", "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+                    "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", 
+                    "#FF00FF", "#33312E")  # Replace with your desired colors
 
 # Modify your ggplot code
 plantareachart <- ggplot(plant, aes(x = Date, y = Percentage.cover, fill = Species)) +
@@ -170,7 +171,10 @@ plantareachart <- ggplot(plant, aes(x = Date, y = Percentage.cover, fill = Speci
   labs(x = "Month", y = "Plant cover (%)", fill = "Species") +
   scale_fill_manual(values = custom_colors) +  # Set custom colors using scale_fill_manual
   theme_classic() +
-  theme(text = element_text(family = "Times New Roman"))
+  theme(text = element_text(family = "Times New Roman"))+
+  theme(
+    text = element_text(family = "Times New Roman", size = 18)  # Set font to Times New Roman and font size to 14
+  )
 
 plantareachart
 
@@ -185,7 +189,8 @@ plantareachart <- ggplot(plant, aes(x = Date, y = Percentage.cover, fill = Speci
   theme(
     text = element_text(family = "Times New Roman"),
     legend.text = element_text(face = "italic")  # Italicize legend text
-  )
+  )+
+  theme(text = element_text(family = "Times New Roman",size = 18 ))
 
 plantareachart
 
@@ -538,7 +543,12 @@ Monthly_boxplot_Shannon_H <- C_diversity %>%
   scale_color_viridis_d()+
   theme_classic()+
   labs(x= "Month",
-       y= "Shannon_H")
+       y= "Shannon_H Diversity index")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 14)  # Set font to Times New Roman and font size to 14
+  )+
+  scale_x_continuous(  breaks = c(1, 2, 3, 4),    
+                       labels = c( "January", "February", "March", "April"))
 Monthly_boxplot_Shannon_H
 
 
@@ -590,7 +600,10 @@ Monthly_boxplot_Evenness_e.H.S <- C_diversity %>%
   scale_color_viridis_d()+
   theme_classic()+
   labs(x= "Month",
-       y= "Evenness_e.H.S")
+       y= "Evenness_e.H.S")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 14)  # Set font to Times New Roman and font size to 14
+  )
 Monthly_boxplot_Evenness_e.H.S
 # Individuals has been tested for normality using SPSS ~details in thesis notes
 # Individuals = not Normally distributed with few outliers 
@@ -611,7 +624,10 @@ Monthly_boxplot_Individuals <- C_diversity %>%
   scale_color_viridis_d()+
   theme_classic()+
   labs(x= "Month",
-       y= "Individuals")
+       y= "Species Abundance")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 14)  # Set font to Times New Roman and font size to 14
+  )
 Monthly_boxplot_Individuals
 
 
@@ -636,7 +652,10 @@ Monthly_boxplot_Chao.1 <- C_diversity %>%
   scale_color_viridis_d()+
   theme_classic()+
   labs(x= "Month",
-       y= "Chao 1 estimate")
+       y= "Chao 1 estimate")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 14)  # Set font to Times New Roman and font size to 14
+  )
 Monthly_boxplot_Chao.1
 
 
@@ -663,7 +682,29 @@ Monthly_boxplot_Taxa_S <- C_diversity %>%
   scale_color_viridis_d()+
   theme_classic()+
   labs(x= "Month",
-       y= "Species richness")
+       y= "Species richness")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 14)  # Set font to Times New Roman and font size to 14
+  )
 Monthly_boxplot_Taxa_S
 
+C_diversity$Month <- factor(C_diversity$Month, levels = c("January", "February", "March", "April"))
+C_diversity$Period <- as.numeric(C_diversity$Period)
+Monthly_colors <- c("#8c564b", "#1f77b4", "#ff7f0e", "#2ca02c")
 
+spline_boxplot_Shannon_H <- C_diversity %>% 
+  select(Month, Shannon_H, Period) %>%
+  ggplot(aes(x= Period, y = Shannon_H)) +
+  geom_boxplot(aes(x= Month, y = Shannon_H), fill = Month)+
+  scale_color_viridis_d()+
+  theme_classic()+
+  geom_smooth(method = "loess", se = TRUE,
+              colour = "black",
+              size = 1.0 )+
+  labs(x= "Month",
+       y= "Shannon_H Diversity index")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 14)  # Set font to Times New Roman and font size to 14
+  )+
+  scale_x_discrete(labels = c( "January", "February", "March", "April"))
+  spline_boxplot_Shannon_H

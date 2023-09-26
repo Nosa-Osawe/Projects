@@ -52,10 +52,16 @@ library(ggplot2)
 ggplot(PlantNMDS, aes(x = NMDS_df$MDS1, y = NMDS_df$MDS2, color = Samples)) +
   geom_point(size = 3) +  # Customize the point size
   labs(x = "NMDS1", y = "NMDS2") +  # Set axis labels
-  scale_color_manual(values = c("S1" = "red", "S2" = "green", "S3" = "blue" , "S4" = "brown",
-                                "S5" = "orange")) +  # Specify colors
+  scale_color_manual(values = c("S1" = "red", "S2" = "green", "S3" = "blue" ,
+                                "S4" = "darkblue",
+                                "S5" = "purple")) +  # Specify colors
   theme_minimal()+
-  stat_ellipse(geom = "polygon", aes(group = Samples), level = 0.95, fill = "transparent")
+  stat_ellipse(geom = "polygon", aes(group = Samples), level = 0.95, fill = "transparent")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 16)  # Set font to Times New Roman and font size to 14
+  )+
+  theme_classic()
+
 
 
 ##################################################################################
