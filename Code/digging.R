@@ -123,7 +123,7 @@ digg_Evenness_e.H.S<-digg %>%
 digg_Evenness_e.H.S
 
 
-digg2 <- read.csv("C:\\Users\\user\\Desktop\\Digging_in.csv")
+digg2 <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in.csv")
 View(digg2)
 
 #digg2$Day <- factor(digg2$Day, levels = c("Day(2-4)", "Day(6-8)", "Day(9-11)")) 
