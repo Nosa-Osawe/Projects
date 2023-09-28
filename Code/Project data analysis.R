@@ -847,3 +847,54 @@ spline_boxplot_Shannon_H <- C_diversity %>%
                        labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
   Simpson_1.D2
   
+  
+  
+  Individuals2 <- C_diversity2 %>% 
+    select(Period, Individuals) %>%
+    ggplot() +
+    geom_boxplot(aes(x=factor(Period), y = Individuals),
+                 outlier.fill = "transparent",
+                 outlier.shape = NA,
+                 fill = spray_period)+
+    geom_point(aes(x=factor(Period), y = Individuals, colour = Month),
+               position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
+               size = 6,  alpha = 0.75) +
+    scale_color_manual(values = Monthly_colors)+
+    geom_smooth(aes(x= Period, y= Individuals),  method = "loess", se = TRUE,formula = y ~ x,
+                colour = "black",
+                size = 1.0 )+
+    theme_classic()+
+    labs(x= "Month",
+         y= "Species abundance", legend = FALSE)+
+    theme(
+      text = element_text(family = "Times New Roman", size = 20))+
+    scale_x_discrete(  breaks = c(1, 2, 3, 4, 5),    
+                       labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
+  Individuals2
+  
+  
+  Chao.12 <- C_diversity2 %>% 
+    select(Period, Chao.1) %>%
+    ggplot() +
+    geom_boxplot(aes(x=factor(Period), y = Chao.1),
+                 outlier.fill = "transparent",
+                 outlier.shape = NA,
+                 fill = spray_period)+
+    geom_point(aes(x=factor(Period), y = Chao.1, colour = Month),
+               position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
+               size = 6,  alpha = 0.75) +
+    scale_color_manual(values = Monthly_colors)+
+    geom_smooth(aes(x= Period, y= Chao.1),  method = "loess", se = TRUE,formula = y ~ x,
+                colour = "black",
+                size = 1.0 )+
+    theme_classic()+
+    labs(x= "Month",
+         y= "Chao.1 estimates", legend = FALSE)+
+    theme(
+      text = element_text(family = "Times New Roman", size = 20))+
+    scale_x_discrete(  breaks = c(1, 2, 3, 4, 5),    
+                       labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
+  Chao.12
+  
+  
+  
