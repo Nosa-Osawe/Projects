@@ -724,7 +724,8 @@ spline_boxplot_Shannon_H <- C_diversity %>%
   #C_diversity$Shannon_H <- as.integer(C_diversity$Shannon_H)
   C_diversity2$Month <- factor(C_diversity2$Month)
   C_diversity2$Period<- as.numeric( C_diversity2$Period)
-  Monthly_colors <- c( "#BABABA", "#BABABA", "#F3F3F3", "#F3F3F3", "#F3F3F3")
+  spray_period <- c( "#BABABA", "#BABABA", "#F3F3F3", "#F3F3F3", "#F3F3F3")
+  Monthly_colors <-c("#FFFF0C", "orange", "#353535", "#A0662C", "brown")
   
   Shannon_H2 <- C_diversity2 %>% 
     select(Period, Shannon_H) %>%
@@ -732,11 +733,11 @@ spline_boxplot_Shannon_H <- C_diversity %>%
     geom_boxplot(aes(x=factor(Period), y = Shannon_H),
                  outlier.fill = "transparent",
                  outlier.shape = NA,
-                 fill = Monthly_colors)+
+                 fill = spray_period)+
     geom_point(aes(x=factor(Period), y = Shannon_H, colour = Month),
                position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
-               size = 6,  alpha = 0.7) +
-    scale_color_viridis_d()+
+               size = 6,  alpha = 0.75) +
+    scale_color_manual(values = Monthly_colors)+
     geom_smooth(aes(x= Period, y= Shannon_H),  method = "loess", se = TRUE,formula = y ~ x,
                 colour = "black",
                 size = 1.0 )+
@@ -749,4 +750,100 @@ spline_boxplot_Shannon_H <- C_diversity %>%
                          labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
   Shannon_H2
   
+  
+  Taxa_S2 <- C_diversity2 %>% 
+    select(Period, Taxa_S) %>%
+    ggplot() +
+    geom_boxplot(aes(x=factor(Period), y = Taxa_S),
+                 outlier.fill = "transparent",
+                 outlier.shape = NA,
+                 fill = spray_period)+
+    geom_point(aes(x=factor(Period), y = Taxa_S, colour = Month),
+               position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
+               size = 6,  alpha = 0.75) +
+    scale_color_manual(values = Monthly_colors)+
+    geom_smooth(aes(x= Period, y= Taxa_S),  method = "loess", se = TRUE,formula = y ~ x,
+                colour = "black",
+                size = 1.0 )+
+    theme_classic()+
+    labs(x= "Month",
+         y= "Species richness", legend = FALSE)+
+    theme(
+      text = element_text(family = "Times New Roman", size = 20))+
+    scale_x_discrete(  breaks = c(1, 2, 3, 4, 5),    
+                       labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
+  Taxa_S2
+  
+  
+  Dominance_D2 <- C_diversity2 %>% 
+    select(Period, Dominance_D) %>%
+    ggplot() +
+    geom_boxplot(aes(x=factor(Period), y = Dominance_D),
+                 outlier.fill = "transparent",
+                 outlier.shape = NA,
+                 fill = spray_period)+
+    geom_point(aes(x=factor(Period), y = Dominance_D, colour = Month),
+               position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
+               size = 6,  alpha = 0.75) +
+    scale_color_manual(values = Monthly_colors)+
+    geom_smooth(aes(x= Period, y= Dominance_D),  method = "loess", se = TRUE,formula = y ~ x,
+                colour = "black",
+                size = 1.0 )+
+    theme_classic()+
+    labs(x= "Month",
+         y= "Dominance", legend = FALSE)+
+    theme(
+      text = element_text(family = "Times New Roman", size = 20))+
+    scale_x_discrete(  breaks = c(1, 2, 3, 4, 5),    
+                       labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
+  Dominance_D2
+  
+  
+  
+  Evenness_e.H.S2 <- C_diversity2 %>% 
+    select(Period, Evenness_e.H.S) %>%
+    ggplot() +
+    geom_boxplot(aes(x=factor(Period), y = Evenness_e.H.S),
+                 outlier.fill = "transparent",
+                 outlier.shape = NA,
+                 fill = spray_period)+
+    geom_point(aes(x=factor(Period), y = Evenness_e.H.S, colour = Month),
+               position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
+               size = 6,  alpha = 0.75) +
+    scale_color_manual(values = Monthly_colors)+
+    geom_smooth(aes(x= Period, y= Evenness_e.H.S),  method = "loess", se = TRUE,formula = y ~ x,
+                colour = "black",
+                size = 1.0 )+
+    theme_classic()+
+    labs(x= "Month",
+         y= "Evenness", legend = FALSE)+
+    theme(
+      text = element_text(family = "Times New Roman", size = 20))+
+    scale_x_discrete(  breaks = c(1, 2, 3, 4, 5),    
+                       labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
+  Evenness_e.H.S2
+  
+  
+  Simpson_1.D2 <- C_diversity2 %>% 
+    select(Period, Simpson_1.D) %>%
+    ggplot() +
+    geom_boxplot(aes(x=factor(Period), y = Simpson_1.D),
+                 outlier.fill = "transparent",
+                 outlier.shape = NA,
+                 fill = spray_period)+
+    geom_point(aes(x=factor(Period), y = Simpson_1.D, colour = Month),
+               position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
+               size = 6,  alpha = 0.75) +
+    scale_color_manual(values = Monthly_colors)+
+    geom_smooth(aes(x= Period, y= Simpson_1.D),  method = "loess", se = TRUE,formula = y ~ x,
+                colour = "black",
+                size = 1.0 )+
+    theme_classic()+
+    labs(x= "Month",
+         y= "Simpson diversity index", legend = FALSE)+
+    theme(
+      text = element_text(family = "Times New Roman", size = 20))+
+    scale_x_discrete(  breaks = c(1, 2, 3, 4, 5),    
+                       labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
+  Simpson_1.D2
   
