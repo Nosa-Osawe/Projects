@@ -709,3 +709,44 @@ spline_boxplot_Shannon_H <- C_diversity %>%
   )+
   scale_x_discrete(labels = c( "January", "February", "March", "April"))
   spline_boxplot_Shannon_H
+
+  
+  
+  #############################################################################################
+  
+  # combined days in the month 
+  C_diversity2 <- read.csv("C:\\Users\\user\\Desktop\\ant_div.csv")
+  View(C_diversity2)
+  
+  C_diversity2$Month <- factor(C_diversity2$Month, levels = c("December", "January", "February", "March", "April"))
+  
+  attach(C_diversity2)
+  #C_diversity$Shannon_H <- as.integer(C_diversity$Shannon_H)
+  C_diversity2$Month <- factor(C_diversity2$Month)
+  C_diversity2$Period<- as.numeric( C_diversity2$Period)
+  Monthly_colors <- c( "#BABABA", "#BABABA", "#F3F3F3", "#F3F3F3", "#F3F3F3")
+  
+  Shannon_H2 <- C_diversity2 %>% 
+    select(Period, Shannon_H) %>%
+    ggplot() +
+    geom_boxplot(aes(x=factor(Period), y = Shannon_H),
+                 outlier.fill = "transparent",
+                 outlier.shape = NA,
+                 fill = Monthly_colors)+
+    geom_point(aes(x=factor(Period), y = Shannon_H, colour = Month),
+               position = position_jitterdodge(jitter.width = 1, dodge.width = 0.4),
+               size = 6,  alpha = 0.7) +
+    scale_color_viridis_d()+
+    geom_smooth(aes(x= Period, y= Shannon_H),  method = "loess", se = TRUE,formula = y ~ x,
+                colour = "black",
+                size = 1.0 )+
+    theme_classic()+
+    labs(x= "Month",
+         y= "Shannon_H diversity index", legend = FALSE)+
+    theme(
+      text = element_text(family = "Times New Roman", size = 20))+
+    scale_x_discrete(  breaks = c(1, 2, 3, 4, 5),    
+                         labels = c( "Dec", "Jan", "Feb", "Mar", "Apr"))
+  Shannon_H2
+  
+  
