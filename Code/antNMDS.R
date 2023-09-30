@@ -42,6 +42,42 @@ corrplot(cor(antNMDS$points, antdata1),  method ='color',
 
 ###################################################################################
 
+antdiversitynmds2 <- read.csv("C:\\Users\\user\\Desktop\\antNMDS2.csv")
+view(antdiversitynmds2)
+dim(antdiversitynmds2)
+#subset_plantNMDS <- PlantNMDS %>% filter(Samples == "Sample1")
+#subset_plantNMDS <- PlantNMDS[PlantNMDS$Samples %in% c("Sampling1", "Sampling5"), ]
+antdata12 <- antdiversitynmds2[,3:8]
+antdata22 <- antdiversitynmds2[,1:2]
+antNMDS2 <- metaMDS(antdata12, distance = "bray", k=2)
+antNMDS2$stress
+
+antNMDS2$points
+antNMDS_df2 <- as.data.frame(antNMDS2$points)
+
+# adonis2 is recommended 
+antfit22 <- adonis2 (antdata12~Month, data = antdata22, permutations = 9999, method = "bray")
+antfit22
+
+ggplot(antdiversitynmds2, aes(x = antNMDS_df2$MDS1, y = antNMDS_df2$MDS2, color = Month)) +
+  geom_point(size = 3) +  # Customize the point size
+  labs(x = "NMDS1", y = "NMDS2") +  # Set axis labels
+  scale_color_manual(values = c("December" = "#FFFF0C","January" = "orange", 
+                                "February" = "#353535", "March" = "#A0662C",
+                                "April" = "brown")) +  # Specify colors
+  stat_ellipse(geom = "polygon", aes(group = Month), level = 0.95, fill = "transparent")+
+  theme(
+    text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
+  )+
+  theme_classic()
+
+corrplot(cor(antNMDS2$points, antdata12),  method ='color',
+         addCoef.col='black',
+         tl.cex = 1, tl.col = 'black', col = my_color_palette)
+
+
+###################################################################################
+
 anttt <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\anttttttttttttt.csv")
 view(anttt)
 dim(anttt)

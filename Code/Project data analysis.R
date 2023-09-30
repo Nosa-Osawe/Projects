@@ -799,7 +799,6 @@ spline_boxplot_Shannon_H <- C_diversity %>%
   Dominance_D2
   
   
-  
   Evenness_e.H.S2 <- C_diversity2 %>% 
     select(Period, Evenness_e.H.S) %>%
     ggplot() +
@@ -897,4 +896,74 @@ spline_boxplot_Shannon_H <- C_diversity %>%
   Chao.12
   
   
+##################################################################
+  # hypothesis testing
   
+  kruskal.test(C_diversity2$Taxa_S ~ C_diversity2$Month)  
+  dunn.test(C_diversity2$Taxa_S, C_diversity2$Month, method = "bonferroni")
+Taxa_S_2 <- aggregate(C_diversity2$Taxa_S,
+                                  by = list(C_diversity2$Month),
+                                  FUN = function(x) c(median = median(x), 
+                                                      mean = mean(x), sd = sd(x)))
+Taxa_S_2
+
+
+kruskal.test(C_diversity2$Individuals ~ C_diversity2$Month)  
+dunn.test(C_diversity2$Individuals, C_diversity2$Month, method = "bonferroni")
+Individuals_2 <- aggregate(C_diversity2$Individuals,
+                      by = list(C_diversity2$Month),
+                      FUN = function(x) c(median = median(x), 
+                                          mean = mean(x), sd = sd(x)))
+Individuals_2
+
+anova_Evenness_e.H.S2 <- aov(C_diversity2$Evenness_e.H.S ~ C_diversity2$Month, data = C_diversity2)
+summary(anova_Evenness_e.H.S2)
+
+TukeyHSD(anova_Evenness_e.H.S2)
+
+Evenness_e.H.S_D_summary2 <- aggregate(C_diversity2$Evenness_e.H.S,
+                                      by = list(C_diversity2$Month),
+                                      FUN = function(x) c(median = median(x), 
+                                                          mean = mean(x), sd = sd(x)))
+Evenness_e.H.S_D_summary2
+
+
+
+anova_Shannon_H2 <- aov(C_diversity2$Shannon_H ~ C_diversity2$Month, data = C_diversity2)
+summary(anova_Shannon_H2)
+
+TukeyHSD(anova_Shannon_H2)
+
+Shannon_H_summary2 <- aggregate(C_diversity2$Shannon_H,
+                                       by = list(C_diversity2$Month),
+                                       FUN = function(x) c(median = median(x), 
+                                                           mean = mean(x), sd = sd(x)))
+Shannon_H_summary2
+
+anova_Simpson_1.D <- aov(C_diversity2$Simpson_1.D ~ C_diversity2$Month, data = C_diversity2)
+summary(anova_Simpson_1.D)
+
+TukeyHSD(anova_Simpson_1.D)
+
+Simpson_1.D_summary2 <- aggregate(C_diversity2$Simpson_1.D,
+                                by = list(C_diversity2$Month),
+                                FUN = function(x) c(median = median(x), 
+                                                    mean = mean(x), sd = sd(x)))
+Simpson_1.D_summary2
+
+anova_Dominance_D <- aov(C_diversity2$Dominance_D ~ C_diversity2$Month, data = C_diversity2)
+summary(anova_Dominance_D)
+
+TukeyHSD(anova_Dominance_D)
+
+Dominance_D_summary2 <- aggregate(C_diversity2$Dominance_D,
+                                  by = list(C_diversity2$Month),
+                                  FUN = function(x) c(median = median(x), 
+                                                      mean = mean(x), sd = sd(x)))
+Dominance_D_summary2
+
+
+
+
+
+
