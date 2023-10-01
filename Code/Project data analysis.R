@@ -174,7 +174,11 @@ plantareachart <- ggplot(plant, aes(x = Date, y = Percentage.cover, fill = Speci
   theme_classic() +
   theme(text = element_text(family = "Times New Roman"))+
   theme(
-    text = element_text(family = "Times New Roman", size = 18)  # Set font to Times New Roman and font size to 14
+    text = element_text(family = "Times New Roman", size = 16), 
+    # Set font to Times New Roman and font size to 18
+    plot.title = element_text(face = "italic"),  # Italicize plot title
+    legend.text = element_text(face = "italic"),  # Italicize legend text
+    plot.caption = element_text(face = "italic")
   )
 
 plantareachart

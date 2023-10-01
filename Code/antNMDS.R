@@ -62,15 +62,15 @@ antfit22
 ggplot(antdiversitynmds2, aes(x = antNMDS_df2$MDS1, y = antNMDS_df2$MDS2, color = Month)) +
   geom_point(size = 3) +  # Customize the point size
   labs(x = "NMDS1", y = "NMDS2") +  # Set axis labels
-  scale_color_manual(values = c("December" = "green","January" = "blue", 
-                                "February" = "black", "March" = "red",
-                                "April" = "orange")) +  # Specify colors
+  scale_color_manual(values = c("December" = "yellow","January" = "orange", 
+                                "February" = "#353535", "March" = "#A0662C",
+                                "April" = "brown")) +  # Specify colors
   stat_ellipse(geom = "polygon", aes(group = Month), 
                level = 0.95,
-               size = 1.2,
+               size = 0.9,
                fill = "transparent")+
   theme(
-    text = element_text(family = "Times New Roman", size = 50))+  
+    text = element_text(family = "Times New Roman", size = 20))+  
   theme_classic()
 
 corrplot(cor(antNMDS2$points, antdata12),  method = c("number"),
