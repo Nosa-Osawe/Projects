@@ -172,7 +172,7 @@ fviz_mfa_var(res.uwaifo3, "quali.var", palette = "jco",
              col.var.sup = FALSE,   repel = TRUE)+
   theme_classic()
 
-#change also the legend position from "right" to "bottom"
+#change also the legend position from "right" to "bottom."
 fviz_mfa_var(res.uwaifo3, "quanti.var", palette = "jco",
              col.var.sup = FALSE, repel = TRUE,
              geom = c("point", "text"), legend = "bottom")+
