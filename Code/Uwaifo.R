@@ -172,6 +172,12 @@ fviz_mfa_var(res.uwaifo3, "quali.var", palette = "jco",
              col.var.sup = FALSE,   repel = TRUE)+
   theme_classic()
 
+#change also the legend position from "right" to "bottom"
+fviz_mfa_var(res.uwaifo3, "quanti.var", palette = "jco",
+             col.var.sup = FALSE, repel = TRUE,
+             geom = c("point", "text"), legend = "bottom")+
+  theme_classic()
+
 #color individuals by their cos2 values
 fviz_mfa_ind(res.uwaifo3, col.ind = "cos2",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
@@ -184,7 +190,7 @@ fviz_mfa_ind(res.uwaifo3,
              palette = c("#00AFBB", "#E7B800", "#FC4E07", "green"),
              addEllipses = TRUE, ellipse.type = "confidence",
              repel = TRUE,
-             geom = c("point"))+
+             geom = c("point", "text"))+
   theme_classic()
 
 #######################################################################################
