@@ -187,9 +187,9 @@ data1_S3S4 <- S3S4[,3:14]
 data2_S3S4 <- S3S4[,1:2]
 NMDS_S3S4 <- metaMDS(data1_S3S4, distance = "bray", k=2)
 
-fit2_S3S4 <- adonis2 (data1_S3S4~data2_S3S4$Samples, data = data2_S3S4, permutations = 9999,
+ <- adonis2 (data1_S3S4~data2_S3S4$Samples, data = data2_S3S4, permutations = 9999,
                       method = "bray")
-fit2_S3S4
+
 
 #################################################################################
 S3S5 <-PlantNMDS %>% 
@@ -217,6 +217,13 @@ fit2_S5S4
 
 
 
-
-
+fit2_S1S2$`Pr(>F)`
+fit2_S1S3$`Pr(>F)`
+fit2_S1S4$`Pr(>F)`
+fit2_S1S5$`Pr(>F)`
+fit2_S2S3$`Pr(>F)`  
+fit2_S2S4$`Pr(>F)` 
+fit2_S2S5$`Pr(>F)` 
+fit2_S3S5$`Pr(>F)` 
+fit2_S5S4$`Pr(>F)`
 
