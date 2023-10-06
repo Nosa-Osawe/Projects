@@ -32,7 +32,7 @@ ordispider(NMDS, groups = data2$Samples, label = TRUE,  col =co, lwd = line_widt
 fit <- adonis(data1~Samples, data = data2, permutations = 10, method = "bray")
 fit
 # adonis2 is recommended 
-fit2 <- adonis2 (data1~Samples, data = data2, permutations = 9999, method = "bray")
+fit2 <- adonis2 (data1~Samples, data = data2, permutations = 999, method = "bray")
 fit2
 
 
@@ -82,148 +82,144 @@ data1 <- PlantNMDS[,3:14]
 data2 <- PlantNMDS[,1:2]
 NMDS <- metaMDS(data1, distance = "bray", k=2)
 
-fit2 <- adonis2 (data1~Samples, data = data2, permutations = 9999,
+fit2 <- adonis2 (data1~Samples, data = data2, permutations = 999,
                  method = "bray")
 fit2
 #############################################################
 
 S1S2 <-PlantNMDS %>% 
   filter(Samples=="S1" | Samples== "S2")
-view(S1S2)
 data1_S1S2 <- S1S2[,3:14]
 data2_S1S2 <- S1S2[,1:2]
 NMDS_S1S2 <- metaMDS(data1_S1S2, distance = "bray", k=2)
 
-fit2_S1S2 <- adonis2 (data1_S1S2~Samples, data = data2_S1S2, permutations = 9999,
+fit2_S1S2 <- adonis2 (data1_S1S2~Samples, data = data2_S1S2, permutations = 999,
                       method = "bray")
 fit2_S1S2
 
 #################################################################################
 S1S3 <-PlantNMDS %>% 
   filter(Samples=="S1" | Samples== "S3")
-view(S1S3)
 data1_S1S3 <- S1S3[,3:14]
 data2_S1S3 <- S1S3[,1:2]
 NMDS_S1S3 <- metaMDS(data1_S1S3, distance = "bray", k=2)
 
-fit2_S1S3 <- adonis2 (data1_S1S3~Samples, data = data2_S1S3, permutations = 9999,
+fit2_S1S3 <- adonis2 (data1_S1S3~Samples, data = data2_S1S3, permutations = 999,
                       method = "bray")
 fit2_S1S3
 ################################################################################
 
 S1S4 <-PlantNMDS %>% 
   filter(Samples=="S1" | Samples== "S4")
-view(S1S4)
+
 data1_S1S4 <- S1S4[,3:14]
 data2_S1S4 <- S1S4[,1:2]
 NMDS_S1S4 <- metaMDS(data1_S1S4, distance = "bray", k=2)
 
-fit2_S1S4 <- adonis2 (data1_S1S4~Samples, data = data2_S1S4, permutations = 9999,
+fit2_S1S4 <- adonis2 (data1_S1S4~Samples, data = data2_S1S4, permutations = 999,
                       method = "bray")
 fit2_S1S4
 ##################################################################################
 S1S5 <-PlantNMDS %>% 
   filter(Samples=="S1" | Samples== "S5")
-view(S1S5)
+
 data1_S1S5 <- S1S5[,3:14]
 data2_S1S5 <- S1S5[,1:2]
 NMDS_S1S5 <- metaMDS(data1_S1S5, distance = "bray", k=2)
 
-fit2_S1S5 <- adonis2 (data1_S1S5~Samples, data = data2_S1S5, permutations = 9999,
+fit2_S1S5 <- adonis2 (data1_S1S5~Samples, data = data2_S1S5, permutations = 999,
                       method = "bray")
 fit2_S1S5
 #################################################################################
 S2S5 <-PlantNMDS %>% 
   filter(Samples=="S1" | Samples== "S5")
-view(S1S5)
+
 data1_S1S5 <- S1S5[,3:14]
 data2_S1S5 <- S1S5[,1:2]
 NMDS_S1S5 <- metaMDS(data1_S1S5, distance = "bray", k=2)
 
-fit2_S1S5 <- adonis2 (data1_S1S5~Samples, data = data2_S1S5, permutations = 9999,
+fit2_S1S5 <- adonis2 (data1_S1S5~Samples, data = data2_S1S5, permutations = 999,
                       method = "bray")
 fit2_S1S5
 #################################################################################
 S2S3 <-PlantNMDS %>% 
   filter(Samples=="S2" | Samples== "S3")
-view(S2S3)
+
 data1_S2S3 <- S2S3[,3:14]
 data2_S2S3 <- S2S3[,1:2]
 NMDS_S2S3 <- metaMDS(data1_S2S3, distance = "bray", k=2)
 
-fit2_S2S3 <- adonis2 (data1_S2S3~Samples, data = data2_S1S5, permutations = 9999,
+fit2_S2S3 <- adonis2 (data1_S2S3~Samples, data = data2_S1S5, permutations = 999,
                       method = "bray")
 fit2_S2S3
 
 #####################################################################################
 S2S4 <-PlantNMDS %>% 
   filter(Samples=="S2" | Samples== "S4")
-view(S2S4)
+
 data1_S2S4 <- S2S4[,3:14]
 data2_S2S4 <- S2S4[,1:2]
 NMDS_S2S4 <- metaMDS(data1_S2S4, distance = "bray", k=2)
 
-fit2_S2S4 <- adonis2 (data1_S2S4~Samples, data = data2_S1S4, permutations = 9999,
+fit2_S2S4 <- adonis2 (data1_S2S4~Samples, data = data2_S1S4, permutations = 999,
                       method = "bray")
 fit2_S2S4
 
 ################################################################################
 S2S5 <-PlantNMDS %>% 
   filter(Samples=="S2" | Samples== "S5")
-view(S2S5)
 data1_S2S5 <- S2S5[,3:14]
 data2_S2S5 <- S2S5[,1:2]
 NMDS_S2S5 <- metaMDS(data1_S2S5, distance = "bray", k=2)
 
-fit2_S2S5 <- adonis2 (data1_S2S5~Samples, data = data2_S1S5, permutations = 9999,
+fit2_S2S5 <- adonis2 (data1_S2S5~Samples, data = data2_S1S5, permutations = 999,
                       method = "bray")
 fit2_S2S5
 
 ##################################################################################
 S3S4 <-PlantNMDS %>% 
   filter(Samples=="S3" | Samples== "S4")
-view(S3S4)
 data1_S3S4 <- S3S4[,3:14]
 data2_S3S4 <- S3S4[,1:2]
 NMDS_S3S4 <- metaMDS(data1_S3S4, distance = "bray", k=2)
 
- <- adonis2 (data1_S3S4~data2_S3S4$Samples, data = data2_S3S4, permutations = 9999,
+fit2_S3S4 <- adonis2 (data1_S3S4~data2_S3S4$Samples, data = data2_S3S4, permutations = 999,
                       method = "bray")
-
+fit2_S3S4
 
 #################################################################################
 S3S5 <-PlantNMDS %>% 
   filter(Samples=="S3" | Samples== "S5")
-view(S3S5)
 data1_S3S5 <- S3S5[,3:14]
 data2_S3S5 <- S3S5[,1:2]
 NMDS_S3S5 <- metaMDS(data1_S3S5, distance = "bray", k=2)
 
-fit2_S3S5 <- adonis2 (data1_S3S5~data2_S3S5$Samples, data = data2_S3S5, permutations = 9999,
+fit2_S3S5 <- adonis2 (data1_S3S5~data2_S3S5$Samples, data = data2_S3S5, permutations = 999,
                       method = "bray")
 fit2_S3S5
 #################################################################################
 
 S5S4 <-PlantNMDS %>% 
   filter(Samples=="S5" | Samples== "S4")
-view(S5S4)
 data1_S5S4 <- S5S4[,3:14]
 data2_S5S4 <- S5S4[,1:2]
 NMDS_S5S4 <- metaMDS(data1_S5S4, distance = "bray", k=2)
 
-fit2_S5S4 <- adonis2 (data1_S5S4~data2_S5S4$Samples, data = data2_S5S4, permutations = 9999,
+fit2_S5S4 <- adonis2 (data1_S5S4~data2_S5S4$Samples, data = data2_S5S4, permutations = 999,
                       method = "bray")
 fit2_S5S4
 
 
 
-fit2_S1S2$`Pr(>F)`
-fit2_S1S3$`Pr(>F)`
-fit2_S1S4$`Pr(>F)`
-fit2_S1S5$`Pr(>F)`
-fit2_S2S3$`Pr(>F)`  
-fit2_S2S4$`Pr(>F)` 
-fit2_S2S5$`Pr(>F)` 
-fit2_S3S5$`Pr(>F)` 
-fit2_S5S4$`Pr(>F)`
+pvalues_plant<-c(fit2_S1S2$`Pr(>F)`,
+fit2_S1S3$`Pr(>F)`,
+fit2_S1S4$`Pr(>F)`,
+fit2_S1S5$`Pr(>F)`,
+fit2_S2S3$`Pr(>F)` , 
+fit2_S2S4$`Pr(>F)` ,
+fit2_S2S5$`Pr(>F)` ,
+fit2_S3S5$`Pr(>F)` ,
+fit2_S5S4$`Pr(>F)`)
+
+p.adjust(pvalues_plant,method="bonferroni")
 
