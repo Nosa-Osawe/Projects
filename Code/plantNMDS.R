@@ -210,16 +210,51 @@ fit2_S5S4 <- adonis2 (data1_S5S4~data2_S5S4$Samples, data = data2_S5S4, permutat
 fit2_S5S4
 
 
-
-pvalues_plant<-c(fit2_S1S2$`Pr(>F)`,
+pvalues_plant<-c(
+  fit2_S1S2$`Pr(>F)`,
 fit2_S1S3$`Pr(>F)`,
 fit2_S1S4$`Pr(>F)`,
 fit2_S1S5$`Pr(>F)`,
 fit2_S2S3$`Pr(>F)` , 
 fit2_S2S4$`Pr(>F)` ,
 fit2_S2S5$`Pr(>F)` ,
+fit2_S3S4$`Pr(>F)`,
 fit2_S3S5$`Pr(>F)` ,
 fit2_S5S4$`Pr(>F)`)
 
-p.adjust(pvalues_plant,method="bonferroni")
+
+F_statistics_plant<-c(
+  fit2_S1S2$F ,
+  fit2_S1S3$F  ,
+  fit2_S1S4$F,
+  fit2_S1S5$F,
+  fit2_S2S3$F, 
+  fit2_S2S4$F,
+  fit2_S2S5$F,
+  fit2_S3S4$F,
+  fit2_S3S5$F,
+  fit2_S5S4$F)
+
+groups_plant<-c(
+  "fit2_S1S2$`Pr(>F)`",
+  "fit2_S1S3$`Pr(>F)`",
+  "fit2_S1S4$`Pr(>F)`",
+  "fit2_S1S5$`Pr(>F)`",
+  "fit2_S2S3$`Pr(>F)`" , 
+  "fit2_S2S4$`Pr(>F)`" ,
+  "fit2_S2S5$`Pr(>F)`" ,
+  "fit2_S3S4$`Pr(>F)`",
+  "fit2_S3S5$`Pr(>F)`" ,
+  "fit2_S5S4$`Pr(>F)`")
+
+adj.pvalues_plant<- p.adjust(pvalues_plant,method="bonferroni")
+
+pvalues_plant <- na.omit(pvalues_plant)
+adj.pvalues_plant <- na.omit(adj.pvalues_plant)
+F_statistics_plant <- na.omit(F_statistics_plant)
+
+plant_pvalues_df <- data.frame(group = groups_plant,
+                               F_statistics = F_statistics_plant,
+                               P.value = pvalues_plant,
+                               p.adj= adj.pvalues_plant )
 

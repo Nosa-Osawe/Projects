@@ -210,7 +210,7 @@ digg$Evenness_e.H.S
 digg$Chao.1
 
 #################################################################################
-digg3 <-read.csv("C:\\Users\\user\\Desktop\\Digging_in data.csv")
+digg3 <-read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in data.csv")
 
 digg3$Day<- as.numeric(digg3$Day)
 digg3$Dayofsampling <- factor(digg3$Dayofsampling)
@@ -365,3 +365,131 @@ Simpson_1.D_digg3
 Shannon_H_digg3
 Evenness_e.H.S_digg3
 Dominance_D_digg3
+
+
+library(ggplot2)
+
+digg_cor <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in.csv")
+View(digg_cor)
+digg_cor$Sd <- as.numeric(digg_cor$Sd)
+digg_cor$Indices <- as.numeric(digg_cor$Mean.Cor.)
+indices_colour <- c( "red", "darkgreen", "red", "darkgreen", "darkgreen")
+
+attach(digg_cor)
+ggplot(digg_cor, aes(x=Indices, y = Mean.Cor., color= Indices))+
+  geom_pointrange(aes(ymin = Mean.Cor.- Sd, ymax = Mean.Cor.+ Sd ))+
+  scale_color_manual(values = indices_colour)+
+  theme_classic()+ 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme(axis.line.x = element_blank())+
+  theme(axis.ticks.x = element_blank())+
+  theme(axis.ticks.y = element_blank())+
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  theme(axis.line.x = element_blank())+
+  theme(axis.title.x = element_blank())+
+  theme(
+    text = element_text(family = "Times New Roman", size = 15))+
+  labs(y= "Pearson correlation", legend = FALSE)+
+  scale_x_discrete( labels = c( "Dominance", "Evenness",
+                                "Abundance", "Shannon_H", 
+                                "Simpson_D"))+
+  geom_point(size = 4)
+
+ 
+digg4<- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in.csv")
+attach(digg4)
+
+individual_digg4 <- digg4 %>% 
+  ggplot(aes(x=Day, y = Individuals, group = Day )) +
+  geom_boxplot(
+               outlier.fill = "transparent",
+               outlier.shape = NA,
+               fill = "#F0F0F0")+
+  geom_point(aes(colour = Day),
+             position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.22),
+             size = 5,  alpha = 0.5) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
+  )+
+  labs(x= "Periods",
+       y= "Species abundance")+
+  scale_x_discrete( labels = c( "1", "2",
+                                "3"))
+individual_digg4
+
+Shannon_digg4 <- digg4 %>% 
+  ggplot(aes(x=Day, y = Shannon_H, group = Day )) +
+  geom_boxplot(
+    outlier.fill = "transparent",
+    outlier.shape = NA,
+    fill = "#F0F0F0")+
+  geom_point(aes(colour = Day),
+             position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.22),
+             size = 5,  alpha = 0.5) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
+  )+
+  labs(x= "Periods",
+       y= "Shannon_H diversity")+
+  scale_x_discrete( labels = c( "1", "2",
+                                "3"))
+Shannon_digg4
+
+Simpson_digg4 <- digg4 %>% 
+  ggplot(aes(x=Day, y = Simpson_1.D, group = Day )) +
+  geom_boxplot(
+    outlier.fill = "transparent",
+    outlier.shape = NA,
+    fill = "#F0F0F0")+
+  geom_point(aes(colour = Day),
+             position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.22),
+             size = 5,  alpha = 0.5) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
+  )+
+  labs(x= "Periods",
+       y= "Simpson's diversity")+
+  scale_x_discrete( labels = c( "1", "2",
+                                "3"))
+Simpson_digg4
+
+Evenness_digg4 <- digg4 %>% 
+  ggplot(aes(x=Day, y = Evenness_e.H.S, group = Day )) +
+  geom_boxplot(
+    outlier.fill = "transparent",
+    outlier.shape = NA,
+    fill = "#F0F0F0")+
+  geom_point(aes(colour = Day),
+             position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.22),
+             size = 5,  alpha = 0.5) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
+  )+
+  labs(x= "Periods",
+       y= "Evenness")+
+  scale_x_discrete( labels = c( "1", "2",
+                                "3"))
+Evenness_digg4
+
+Dominance_digg4 <- digg4 %>% 
+  ggplot(aes(x=Day, y = Dominance_D, group = Day )) +
+  geom_boxplot(
+    outlier.fill = "transparent",
+    outlier.shape = NA,
+    fill = "#F0F0F0")+
+  geom_point(aes(colour = Day),
+             position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.22),
+             size = 5,  alpha = 0.5) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
+  )+
+  labs(x= "Periods",
+       y= "Dominance")+
+  scale_x_discrete( labels = c( "1", "2",
+                                "3"))
+Dominance_digg4
