@@ -369,10 +369,9 @@ Dominance_D_digg3
 
 library(ggplot2)
 
-digg_cor <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in.csv")
+digg_cor <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\cor_dig.csv")
 View(digg_cor)
-digg_cor$Sd <- as.numeric(digg_cor$Sd)
-digg_cor$Indices <- as.numeric(digg_cor$Mean.Cor.)
+
 indices_colour <- c( "red", "darkgreen", "red", "darkgreen", "darkgreen")
 
 attach(digg_cor)
