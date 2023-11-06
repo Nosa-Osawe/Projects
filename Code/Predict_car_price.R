@@ -9,7 +9,7 @@ car_price <- car_price[,-11:-13] ### just to delete the nonsense column generate
 str(car_price)
 attach(car_price)
 
-# lets see how price vary by condidtion
+# lets see how price vary by condition
 aggregate(data = car_price, Price ~ Condition+Year.of.manufacture, mean, na.rm = TRUE)
 # trying to cut don some outliers
 car_price$Condition<- ifelse(car_price$Condition == "Foreign Used" | 
