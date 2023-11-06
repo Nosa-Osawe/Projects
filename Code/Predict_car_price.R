@@ -2,7 +2,7 @@ library(tidyverse)
 library(psych)
 
 
-car_price <- read.csv("C:\\Users\\user\\Documents\\Nigerian_Car_Prices.csv",
+car_price <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Nigerian_Car_Prices.csv",
                       stringsAsFactors = TRUE)
 view(car_price)
 car_price <- car_price[,-11:-13] ### just to delete the nonsense column generated
@@ -21,6 +21,12 @@ car_price$Mileage      <- ifelse(car_price$Mileage >= 10000 & car_price$Mileage<
                                 car_price$Mileage, NA)
 car_price<-na.omit(car_price)
 
+# Specify the file path where you want to save the CSV file
+Car_file_path <- "C:\\Users\\user\\Desktop\\carprice.csv"
+
+# Save the data frame as a CSV file
+write.csv(car_price, file = Car_file_path, row.names = FALSE)
+
 #### see data distribution
 pairs.panels(car_price[c("Year.of.manufacture", "Mileage", "Price", "Engine.Size")])
 
@@ -35,60 +41,100 @@ Car_model <- lm( Price~ Fuel*Mileage+ Year.of.manufacture+ Condition+
 summary(Car_model) # 75% accuracy
 
 ##############################################################################
-######### 1. LOAD DATASET #############
-car <- read.csv("C:\\Users\\user\\Documents\\Nigerian_Car_Prices.csv", stringsAsFactors = TRUE)
-car <- car[,-11:-13]
-nrow(car)
+
+### collect exchange rate data from CBN website
+CBN <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\exchange01112023.csv")
+
+# Select rows where "column_name" is between 10 and 20
+exchange <- CBN %>%select(Rate.Year, Selling.Rate) %>% 
+  filter(Rate.Year >= 2000, Rate.Year <= 2020)
+
+# lets check for outliers
 
 
-######### 2. CLEAN DATASET ##############
+selling_rate_summary <- exchange %>%
+  group_by(Rate.Year) %>%
+  summarize(
+    min = min(Selling.Rate),
+    max = max(Selling.Rate),
+    mean = mean(Selling.Rate),
+    q1 = quantile(Selling.Rate, 0.25),
+    q3 = quantile(Selling.Rate, 0.75)
+  )
 
 
-# Remove rows with NA values, just incase
-car <- na.omit(car)
-
-#check one more time for na values
-sum(apply(is.na(car), 1, any))
-nrow(car)
-
-########## 3. SPLIT INTO TESTING AND TRAINING SETS ##########
-# Set a seed for reproducibility
-set.seed(123)
-
-# Generate random indices for the training and testing sets
-train_indices <- sample(nrow(car), 0.7 * nrow(car))  # 70% for training
-test_indices <- setdiff(1:nrow(car), train_indices) # 30% testing
-head(train_indices)
-
-# Create training and testing sets using indices
-train_data <- car[train_indices, ]
-test_data <- car[test_indices, ]
-
-# check size of testing and training datasets
-nrow(train_data)
-nrow(test_data)
+average_exchange <- exchange %>%
+  group_by(Rate.Year) %>%
+  summarize(Selling.Rate = mean(Selling.Rate)) ### ops something is wrong
 
 
-########### 4. TRAIN MODEL TO PREDICT LITERACY ############
-glm.build <- glm(Build ~ Price + Fuel + Engine.Size + Transmission
-                    , data = train_data, family = "binomial")
+# Create box plots for sales by year
+
+exchange_Rate_boxplot <- exchange %>%
+  select(Rate.Year, Selling.Rate) %>%
+  ggplot() +
+  geom_boxplot(aes(x=factor(Rate.Year), y = Selling.Rate))+ 
+  labs(title = "Selling rate per year", x = "Year", y = "Selling rate")
+### significant outliers ##Wahala
+
+Filtered_exc_rate <- exchange %>%
+  group_by(Rate.Year) %>%
+  filter(Selling.Rate >= quantile(Selling.Rate, 0.25)
+         & Selling.Rate <= quantile(Selling.Rate, 0.75))
+## lets check
+head(Filtered_exc_rate, 10)
+tail(Filtered_exc_rate, 10)
+# Now, 'filtered_df' contains only rows within the IQR for each year
+
+# lets create another box plot to see outliers
+
+Filtered_exchange_Rate_boxplot <- Filtered_exc_rate %>%
+  select(Rate.Year, Selling.Rate) %>%
+  ggplot() +
+  geom_boxplot(aes(x=factor(Rate.Year), y = Selling.Rate))+ 
+  labs(title = "Selling rate per year", x = "Year", y = "Selling rate")
+## No sig. outliers
+
+## find average
+
+average <- Filtered_exc_rate %>%
+  group_by(Rate.Year) %>%
+  summarize(Selling.Rate = mean(Selling.Rate))
+
+print(average)
+
+# lets try to merge our car price data with the  average exchange rate data
+# identical year names
+car.price <- car_price %>%
+  rename("Year" = Year.of.manufacture)
+average <-average %>%
+  rename("Year" = Rate.Year)
 
 
-########### 5. PREDICT build USING MODEL ##############
-glm.build.predict <- predict(glm.build, test_data, type = 'response')
+merged_Data <- inner_join(car.price,average, by = "Year")
 
-#print first few results
-head(glm.build.predict,3)
 
-########### 6. CHECK MODEL PERFORMANCE ###############
-#convert predicted values back to True/False
-test_data$predict.build <- ifelse(glm.build.predict >= .5,"SUV", "Not SUV")
+#### lets compare with the initial model
 
-head(test_data$predict.build ,5)
-head(test_data$Build,5)
+pairs.panels(merged_Data[c("Year", "Mileage", 
+                         "Price", "Engine.Size", "Selling.Rate")])
 
-#Determine accuracy of model
-car_accuracy <- mean(test_data$predict.build == test_data$Build)
-print(car_accuracy)
+Car.model <- lm( Price~ Fuel*Mileage+ Year+ Condition+Selling.Rate+
+                   Condition*Year+ 
+                   Selling.Rate*Year+
+                   Transmission*Make*Condition + 
+                   Engine.Size*Selling.Rate+ 
+                   Build*Year+
+                   Build*Condition*Engine.Size*Make+
+                   Make*Condition*Year+
+                   Fuel*Year*Make+ Year*Fuel+
+                   Condition*Mileage*Selling.Rate+
+                   Selling.Rate*Build+
+                   Selling.Rate*Year*Engine.Size*Condition*Make*Build,
+                 data = merged_Data)
+summary(Car.model) # 88.3% accuracy
 
-table(car$Build)
+#### write the data to memory
+write.csv(merged_Data, 
+          "C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\updated_cardata.csv")
+
