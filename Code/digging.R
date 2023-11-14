@@ -396,6 +396,8 @@ ggplot(digg_cor, aes(x=Indices, y = Mean.Cor., color= Indices))+
 
  
 digg4<- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in.csv")
+digg4<- read.csv("C:\\Users\\HP\\Documents\\Projects\\Data\\Digging_in.csv")
+
 attach(digg4)
 
 individual_digg4 <- digg4 %>% 
