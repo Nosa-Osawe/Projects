@@ -1,13 +1,11 @@
-library(tidyr)    # load library
-library(ggplot2)
-library(dplyr)
+
 library(dunn.test)
 library(FSA)
-
+library(tidyverse)
 
 digg <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in data.csv")
 View(digg)
-
+digg<- read_csv("Data/Digging_in data.csv")
 digg$Day <- factor(digg$Day, levels = c("2", "3", "4", "6", "7",
                                         "8", "9", "10", "11"))
 #digg$Day<- as.numeric(digg$Day)
@@ -211,7 +209,7 @@ digg$Chao.1
 
 #################################################################################
 digg3 <-read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in data.csv")
-
+digg3 <- digg
 digg3$Day<- as.numeric(digg3$Day)
 digg3$Dayofsampling <- factor(digg3$Dayofsampling)
 
@@ -342,7 +340,7 @@ Dominance_D_digg3 <- digg3 %>%
                outlier.fill = "transparent",
                outlier.shape = NA,
                fill = "#F0F0F0")+
-  geom_point(aes(colour = Sampling.period),
+  geom_point(aes(colour = sampling),
              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.22),
              size = 4,  alpha = 0.5) +
   theme_classic()+
@@ -352,8 +350,7 @@ Dominance_D_digg3 <- digg3 %>%
   theme_classic() +
   theme(
     text = element_text(family = "Times New Roman", size = 15)  # Set font to Times New Roman and font size to 14
-  )+
-  scale_x_continuous(  breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),    
+  )+ scale_x_continuous(  breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),    
                        labels = c( "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"))+
   labs(x= "Days",
        y= "Dominance")

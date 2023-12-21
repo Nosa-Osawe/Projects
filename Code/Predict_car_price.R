@@ -4,6 +4,10 @@ library(psych)
 
 car_price <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Nigerian_Car_Prices.csv",
                       stringsAsFactors = TRUE)
+# or
+car_price <- read.csv("C:\\Users\\HP\\Documents\\Projects\\Data\\Nigerian_Car_Prices.csv",
+                      stringsAsFactors = TRUE)
+
 view(car_price)
 car_price <- car_price[,-11:-13] ### just to delete the nonsense column generated
 str(car_price)

@@ -518,6 +518,7 @@ Individuals_summary
 
 # combined days in the month 
 C_diversity <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\C_Ant_diversity_data.csv")
+
 View(C_diversity)
                     # re-level
 C_diversity$Month <- factor(C_diversity$Month, levels = c("January", "February", "March", "April"))
@@ -965,6 +966,7 @@ Dominance_D_summary2 <- aggregate(C_diversity2$Dominance_D,
                                   FUN = function(x) c(median = median(x), 
                                                       mean = mean(x), sd = sd(x)))
 Dominance_D_summary2
+
 
 
 

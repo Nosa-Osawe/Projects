@@ -70,7 +70,36 @@ model_pred <- function(model, dataframe) {
 newdata1 <- model_pred(attrtion_model1, attrition)
 view(newdata1)
 
+## save newdata1 as attrition_new1.csv
 write.csv(newdata1,"C:\\Users\\HP\\Documents\\Projects\\Data\\attrition_new1.csv")
 
-newdata2 <- model_pred(attrtion_model1, datatrain_attrition)
+newdata2 <- model_pred(attrtion_model1, datatrain_attrition) # not necessary
 view(newdata2)
+
+
+########################################################################################
+### lets fit the model to the original data to predict work stay of workers
+
+original <- read.csv( "C:\\Users\\HP\\Desktop\\train.csv")
+
+
+original$Designation <- factor(original$Designation, 
+                                levels = c("1", "2", "3", "4", "5"))
+original$Joining.Designation <- factor(original$Joining.Designation, 
+                                        levels = c("1", "2", "3", "4", "5"))
+original$Education_Level <- factor(original$Education_Level, 
+                                    levels=  c("College", 
+                                               "Bachelor",
+                                               "Master"))
+attach(original)
+newdata2 <- model_pred(attrtion_model1, original)
+view(newdata2)
+
+newdata2 %>%
+  group_by(Emp_ID) %>%
+  slice(which.max(predicted_quaters)) %>%
+  select(Emp_ID, Dateofjoining, predicted_quaters)
+
+
+newdata2 %>%
+  group_by(Emp_ID) %>% head()
