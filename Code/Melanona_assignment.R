@@ -78,7 +78,7 @@ time_summary_ulcer<- aggregate(melanomafor$time,
                                                     Max = max(x),
                                                     se = sqrt(var(x)/length(x))))
 time_summary_ulcer
-
+ c 
 age_summary_ulcer<- aggregate(melanomafor$age,
                                by = list(as.factor(melanomafor$ulcer)),
                                FUN = function(x) c(median = median(x), 
@@ -396,7 +396,6 @@ qqline(Thickness_sex_1_male$thickness)  #### The residuals are NOT normally dist
 
 
 
-colourr_pac <-c("#FFFF0C", "orange", "#353535", "#A0662C", "brown")
 ggplot(melanomafor, aes(x = thickness, y = time)) +
   geom_point() +
   geom_smooth(method = "lm", se = TRUE) +  

@@ -95,11 +95,13 @@ attach(original)
 newdata2 <- model_pred(attrtion_model1, original)
 view(newdata2)
 
-newdata2 %>%
+predicted_data <-newdata2 %>%
   group_by(Emp_ID) %>%
   slice(which.max(predicted_quaters)) %>%
-  select(Emp_ID, Dateofjoining, predicted_quaters)
+  select(Emp_ID, Dateofjoining, LastWorkingDate, predicted_quaters)
 
 
-newdata2 %>%
-  group_by(Emp_ID) %>% head()
+write.csv(predicted_data,
+          "C:\\Users\\HP\\Documents\\Projects\\Data\\predicted_att.csv")
+
+
