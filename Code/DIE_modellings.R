@@ -4,10 +4,11 @@ library(tidyverse)
 library(MASS)
 
 digg <- read.csv("C:\\Users\\HP\\Desktop\\DIE MODELLING\\Digg.csv")
+digg <- read_csv("Data/Digg.csv")
 view(digg)
 
 mean(digg$Individuals)
-var(digg$Individuals)  ##### THe data is clearly over dispersed
+var(digg$Individuals)  ##### The data is clearly over dispersed
 
 hist(digg$Individuals)
 attach(digg)
@@ -35,3 +36,13 @@ digg %>%
   summarise(mean = mean(Individuals),
             median  = median(Individuals)) 
 
+########################################################################################3
+
+ind_pred3 <- lmer(Shannon_H ~ Day +  (1|Pitfall),
+                    data = digg
+                    )
+summary(ind_pred3)
+
+ind_pred4 <- lmer(Shannon_H ~ Day + Period + ( 1 | Pitfall),
+                  data = digg)
+summary(ind_pred4)
