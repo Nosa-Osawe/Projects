@@ -80,7 +80,7 @@ view(newdata2)
 ########################################################################################
 ### lets fit the model to the original data to predict work stay of workers
 
-original <- read.csv( "C:\\Users\\HP\\Desktop\\train.csv")
+original <- read.csv( "C:\\Users\\HP\\Documents\\Projects\\Data\\attrition_train.csv")
 
 
 original$Designation <- factor(original$Designation, 
