@@ -72,7 +72,31 @@ even_pred1 <- lmer(`Evenness_e^H/S` ~ Day +  (1|Pitfall),
 summary(even_pred1)
 
 
-simp_pred2 <- lmer(`Simpson_1-D` ~ Day +  (1|Pitfall),
+simp_pred2 <- lmer(`Simpson_1-D` ~ Day +   (1|Pitfall),
                    data = digg)
-AIC(simp_pred2)
+summary(simp_pred2)
+
+
+simp_pred3 <- lmer(Individuals ~ Period +   (1|Pitfall),
+                   data = digg)
+summary(simp_pred3)
+
+
+
+simp_pred4 <- lmer(`Simpson_1-D` ~ Period +   (1|Pitfall),
+                   data = digg)
+summary(simp_pred4)
+
+simp_pred5 <- lmer(`Simpson_1-D` ~ Day +   (1|Pitfall),
+                   data = digg)
+summary(simp_pred5)
+
+AIC(simp_pred3)
+AIC(simp_pred4)
+AIC(simp_pred5)
+
+BIC(simp_pred3)
+BIC(simp_pred4)
+BIC(simp_pred5)    ## model with only day as fixed effect is best
+
 
