@@ -36,13 +36,43 @@ digg %>%
   summarise(mean = mean(Individuals),
             median  = median(Individuals)) 
 
-########################################################################################3
+########################################################################################
+
+qqplot(digg$Shannon_H)
+qqnorm(digg$Shannon_H)
+hist(digg$Shannon_H)
+shapiro.test(digg$Shannon_H)
+
+
 
 ind_pred3 <- lmer(Shannon_H ~ Day +  (1|Pitfall),
-                    data = digg
-                    )
+                    data = digg)
 summary(ind_pred3)
 
-ind_pred4 <- lmer(Shannon_H ~ Day + Period + ( 1 | Pitfall),
-                  data = digg)
+ind_pred4 <- glmer(Individuals ~ Day + (1 | Pitfall),
+                   data = digg, family = poisson(link = "log"))
+
 summary(ind_pred4)
+
+ind_pred5 <- glmer(Individuals ~ Day +  (Day | Pitfall),
+                   data = digg, family = poisson(link = "log"))
+
+summary(ind_pred5)
+
+shannon_pred1 <- lmer(Shannon_H ~ Day +  (1|Pitfall),
+                  data = digg)
+summary(shannon_pred1)
+
+Dom_pred1 <- lmer(Dominance_D ~ Day +  (1|Pitfall),
+                      data = digg)
+summary(Dom_pred1)
+
+even_pred1 <- lmer(`Evenness_e^H/S` ~ Day +  (1|Pitfall),
+                  data = digg)
+summary(even_pred1)
+
+
+simp_pred2 <- lmer(`Simpson_1-D` ~ Day +  (1|Pitfall),
+                   data = digg)
+AIC(simp_pred2)
+
