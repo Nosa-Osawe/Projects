@@ -70,19 +70,19 @@ ind_pred6 <- glmer(Individuals ~ Period +  (1 | Pitfall),
 summary(ind_pred6)
 
 
-shannon_pred1 <- lmer(Shannon_H ~ Day +  (1|Pitfall),
-                  data = digg)
+shannon_pred1 <- glmer(Shannon_H ~ Day +  (1|Pitfall),
+                  data = digg, family = Gamma(link = "inverse"))
 summary(shannon_pred1)
 
 shannon_pred2 <- lmer(Shannon_H ~ Period +  (1|Pitfall),
                       data = digg)
 summary(shannon_pred2)
 
-Dom_pred1 <- lmer(Dominance_D ~ Day +  (1|Pitfall),
-                      data = digg)
+Dom_pred1 <- glmer(Dominance_D ~ Day +  (1|Pitfall),
+                      data = digg, family = Gamma(link = "log"))
 summary(Dom_pred1)
 
-Dom_pred2 <- lmer(Dominance_D ~ Period +  (1|Pitfall),
+Dom_pred2 <- lmer(Dominance_D ~ Period +  (1|Day),
                   data = digg)
 summary(Dom_pred2)
 
@@ -96,22 +96,36 @@ simp_pred2 <- lmer(`Simpson_1-D` ~ Day +   (1|Pitfall),
 summary(simp_pred2)
 
 
-simp_pred3 <- lmer(Individuals ~ Period +   (1|Pitfall),
+simp_pred3 <- lmer(Simpson_1.D ~ Period +   (1|Pitfall),
                    data = digg)
 summary(simp_pred3)
 
-
+summary (lmer(Individuals ~ Period +   (1 | Pitfall),
+     data = digg))
 
 simp_pred4 <- lmer(Simpson_1.D ~ Period +   (1|Pitfall),
                    data = digg)
 summary(simp_pred4)
 
-simp_pred5 <- lmer(Simpson_1.D ~ Day +   (1|Pitfall) +  (1|Period),
-                   data = digg)
+
+simp_pred5 <- glmer(Simpson_1.D ~ Day +   (1|Pitfall),
+                   data = digg, family = Gamma(link = "log"))
 summary(simp_pred5)
 
 anova(simp_pred4, simp_pred5)
 
+
+fdigg <- digg %>% 
+  filter(Simpson_1.D >= 0.0001)
+attach(fdigg)
+
+even_pred5 <- glmer(Evenness_e.H.S ~ Day +   (1|Pitfall),
+                    data = fdigg, family = Gamma(link = "log"))
+summary(even_pred5)
+summary(lmer(Evenness_e.H.S ~ Day +   (1|Pitfall),
+      data = fdigg))
+AIC(lmer(Evenness_e.H.S ~ Day +   (1|Pitfall),
+             data = fdigg))
 AIC(simp_pred3)
 AIC(simp_pred4)
 AIC(simp_pred5)
@@ -119,5 +133,14 @@ AIC(simp_pred5)
 BIC(simp_pred3)
 BIC(simp_pred4)
 BIC(simp_pred5)    ## model with only day as fixed effect is best
+
+# Install and load the pscl package if not already installed
+install.packages("pscl")
+library(pscl)
+
+# Assuming your GLMM object is named 'your_glmm_model'
+pseudo_r2_mcfadden <- pR2(ind_pred5)
+print(pseudo_r2_mcfadden)
+
 
 
