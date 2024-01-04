@@ -89,5 +89,5 @@ shan_glmm_per <- glm(Shannon_H ~ Period,
 summary(shan_glmm_per)
 
 
-c_digg$Period <-factor(c_digg$Period, levels =  c("S2", "S3", "S1")) ## careful with releveling
+c_digg$Period <-factor(c_digg$Period, levels =  c("S2", "S3", "S1")) ## careful with re-leveling
 c_digg$Period <-factor(c_digg$Period, levels =  c("S1", "S2", "S3", ))
