@@ -62,28 +62,32 @@ summary(shan_glmm_per)
 ##################################################################################  
 
 c_digg <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Projects\\Data\\Digging_in.csv")
+
+c_digg <- read.csv("C:\\Users\\HP\\Documents\\Projects\\Data\\Digging_in.csv")
 view(c_digg)
 attach(c_digg)
 
+hist(Individuals)
 abun_glmm_per <- glm(Individuals ~ Period ,
-                       data = digg, family = poisson(link = "log"))
-
+                       data = c_digg,  family = poisson(link = "log"))
 summary(abun_glmm_per)
 
-even_glmm_per <- glm(`Evenness_e^H/S` ~ Period ,
-                       data = digg, family = Gamma(link = "log"))
+even_glmm_per <- glm(Evenness_e.H.S~ Period ,
+                       data = c_digg, family = Gamma(link = "log"))
 summary(even_glmm_per)
 
 domi_glmm_per <- glm(Dominance_D ~ Period,
-                       data = digg, family = Gamma(link = "log"))
+                       data = c_digg, family = Gamma(link = "log"))
 summary(domi_glmm_per)
 
-simp_glmm_per <- glm(`Simpson_1-D` ~ Period,
-                       data = fdigg, family = Gamma(link = "log"))
+simp_glmm_per <- glm(Simpson_1.D~ Period,
+                       data = c_digg, family = Gamma(link = "log"))
 summary(simp_glmm_per)
 
 shan_glmm_per <- glm(Shannon_H ~ Period,
-                       data = fdigg, family = Gamma(link = "log"))
+                       data = c_digg, family = Gamma(link = "log"))
 summary(shan_glmm_per)
 
 
+c_digg$Period <-factor(c_digg$Period, levels =  c("S2", "S3", "S1")) ## careful with releveling
+c_digg$Period <-factor(c_digg$Period, levels =  c("S1", "S2", "S3", ))
