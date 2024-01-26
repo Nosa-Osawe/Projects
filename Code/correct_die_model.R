@@ -12,7 +12,7 @@ view(digg)
 attach(digg)
 
 fdigg <- digg %>% 
-  filter(`Simpson_1-D` >= 0.0001)
+  filter(Simpson_1.D >= 0.0001)
 attach(fdigg)
 
 ind_glmm_day <- glmer(Individuals ~ Day + (1 | Pitfall),
@@ -90,4 +90,4 @@ summary(shan_glmm_per)
 
 
 c_digg$Period <-factor(c_digg$Period, levels =  c("S2", "S3", "S1")) ## careful with re-leveling
-c_digg$Period <-factor(c_digg$Period, levels =  c("S1", "S2", "S3", ))
+c_digg$Period <-factor(c_digg$Period, levels =  c("S1", "S2", "S3"))
