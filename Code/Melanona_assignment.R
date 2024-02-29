@@ -162,7 +162,7 @@ summary_age <- melanomafor %>%
     Mean = mean(age),
     Median = median(age),
     SD = sd(age),
-    se = sqrt(var(age)/length(age)),
+    se = sd(age)/sqrt(length(age)),
     Min = min(age),
     Max = max(age),
     Q1 = quantile(age, 0.25),
@@ -180,6 +180,9 @@ summary_time <- melanomafor %>%
     Q1 = quantile(time, 0.25),
     Q3 = quantile(time, 0.75)
   )
+
+hist(melanomafor$age)
+length(time)
 
 summary_thickness <- melanomafor %>%
   summarise(
