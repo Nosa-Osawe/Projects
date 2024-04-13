@@ -391,6 +391,8 @@ Thickness_sex_0_female <- melanomafor %>%
 qqnorm(Thickness_sex_0_female$thickness,  main = "Female-thickness")
 qqline(Thickness_sex_0_female$thickness)  #### The residuals are NOT normally distributed
 
+
+
 Thickness_sex_1_male <- melanomafor %>% 
   select(thickness, sex) %>%
   filter(sex == "Male") 
