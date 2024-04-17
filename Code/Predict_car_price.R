@@ -25,7 +25,7 @@ car_price$Mileage      <- ifelse(car_price$Mileage >= 10000 & car_price$Mileage<
                                 car_price$Mileage, NA)
 car_price<-na.omit(car_price)
 
-# Specify the file path where you want to save the CSV file
+# file path where you want to save the CSV file
 Car_file_path <- "C:\\Users\\user\\Desktop\\carprice.csv"
 
 # Save the data frame as a CSV file
