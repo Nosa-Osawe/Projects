@@ -3,7 +3,7 @@ library(dunn.test)
 library(FSA)
 library(tidyverse)
 
-digg <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in data.csv")
+digg <- read.csv("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Digging_in data.csv")
 View(digg)
 digg<- read_csv("Data/Digging_in data.csv")
 digg$Day <- factor(digg$Day, levels = c("2", "3", "4", "6", "7",
@@ -121,10 +121,10 @@ digg_Evenness_e.H.S<-digg %>%
 digg_Evenness_e.H.S
 
 
-digg2 <- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in.csv")
+digg2 <- read.csv("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Digging_in.csv")
 View(digg2)
 
-#digg2$Day <- factor(digg2$Day, levels = c("Day(2-4)", "Day(6-8)", "Day(9-11)")) 
+digg2$Day <- factor(digg2$Day, levels = c( "Days (2-4)",  "Days (6-8)", "Days (9-11)")) 
 
 ## Taxa richness
 kruskal.test(digg2$Taxa_S ~ digg2$Day)  
@@ -208,7 +208,7 @@ digg$Evenness_e.H.S
 digg$Chao.1
 
 #################################################################################
-digg3 <-read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in data.csv")
+digg3 <-read.csv("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Digging_in data.csv")
 digg3 <- digg
 digg3$Day<- as.numeric(digg3$Day)
 digg3$Dayofsampling <- factor(digg3$Dayofsampling)
@@ -392,8 +392,8 @@ ggplot(digg_cor, aes(x=Indices, y = Mean.Cor., color= Indices))+
   geom_point(size = 4)
 
  
-digg4<- read.csv("C:\\Users\\user\\Documents\\GitHub\\Nosa_thesis\\Data\\Digging_in.csv")
-digg4<- read.csv("C:\\Users\\HP\\Documents\\Projects\\Data\\Digging_in.csv")
+digg4<- read.csv("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Digging_in data.csv")
+digg4<- read.csv("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Digging_in.csv")
 
 attach(digg4)
 
