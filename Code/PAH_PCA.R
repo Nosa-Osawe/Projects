@@ -1,6 +1,25 @@
 library(factoextra)
 library(FactoMineR)
 
+
+ppp <- read.csv("C:\\Users\\DELL\\Desktop\\ddddddd.csv")
+
+view(ppp)
+attach(ppp)
+colnames(ppp)
+#------------- 
+
+PAH <- ppp %>% 
+  select(c(1:9,"Benzo..a..pyrene","Dibenzo..a.h..anthracene")) %>% 
+  rename("BaP"= "Benzo..a..pyrene",
+         "DBahA"= "Dibenzo..a.h..anthracene",
+         "PM2.5"= "Avg..PM2.5")
+head(PAH)
+
+PAH$Pressure <-as.numeric(PAH$Pressure)
+unique(PAH$L.G.A)
+PAH <- na.omit(PAH)
+
 outcome_var <- PAH[,10:11]
 PAH_PCA <- PAH[,4:9]
 LGA_month_season <- PAH[,1:3]
@@ -53,11 +72,19 @@ final_PCA_PAH_LGA <- ggplot() +
   geom_vline(xintercept = 0, linetype = "dashed", color = "black")
 final_PCA_PAH_LGA
 
-final_PCA_PAH_season <- ggplot() +
+Bap_season <- ggplot() +
   geom_point(data = ind_pca_pah, 
              aes(x = PC1, y = PC2, 
                  color = Season, , 
                  size = BaP)) + 
+  stat_ellipse(data = ind_pca_pah, 
+               aes(x = PC1, y = PC2, 
+                   group = Season, 
+                   color = Season), 
+               geom = "path", 
+               level = 0.95, 
+               linewidth = 0.6,  # Adjust this value to make the line bold
+               show.legend = NA) +
 
   scale_color_manual(values = c("orange", "red", "black", "brown","darkgreen"))+
   theme(
@@ -67,5 +94,56 @@ final_PCA_PAH_season <- ggplot() +
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "black")
 
-final_PCA_PAH_season
+Bap_season
 
+
+DBahA_season <- ggplot() +
+  geom_point(data = ind_pca_pah, 
+             aes(x = PC1, y = PC2, 
+                 color = Season, , 
+                 size = DBahA)) + 
+  stat_ellipse(data = ind_pca_pah, 
+               aes(x = PC1, y = PC2, 
+                   group = Season, 
+                   color = Season), 
+               geom = "path", 
+               level = 0.95, 
+               linewidth = 0.6,  # Adjust this value to make the line bold
+               show.legend = NA) +
+  
+  scale_color_manual(values = c("orange", "red", "black", "brown","darkgreen"))+
+  theme(
+    text = element_text(family = "Times New Roman", size = 20),
+  ) + labs(x = "PC1 (53.1%)", y = "PC2 (21.1%)")+
+  theme_minimal() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black")
+
+DBahA_season
+
+
+
+
+Bap_LGA <- ggplot() +
+  geom_point(data = ind_pca_pah, 
+             aes(x = PC1, y = PC2, 
+                 color = L.G.A, , 
+                 size = BaP)) + 
+  stat_ellipse(data = ind_pca_pah, 
+               aes(x = PC1, y = PC2, 
+                   group = L.G.A, 
+                   color = L.G.A), 
+               geom = "path", 
+               level = 0.95, 
+               linewidth = 0.6,  # Adjust this value to make the line bold
+               show.legend = NA) +
+  
+  scale_color_manual(values = c("orange", "red", "black", "brown","darkgreen"))+
+  theme(
+    text = element_text(family = "Times New Roman", size = 20),
+  ) + labs(x = "PC1 (53.1%)", y = "PC2 (21.1%)")+
+  theme_minimal() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black")
+
+Bap_LGA

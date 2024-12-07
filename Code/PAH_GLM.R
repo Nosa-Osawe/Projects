@@ -18,6 +18,10 @@ head(PAH)
 PAH$Pressure <-as.numeric(PAH$Pressure)
 unique(PAH$L.G.A)
 PAH <- na.omit(PAH)
+
+
+
+
 IKPOBA_OKHA <-PAH %>% 
   filter(L.G.A== "IKPOBA-OKHA")
 
