@@ -2,8 +2,9 @@ require(tidyverse)
 require(agricolae)
 require(readxl)
 
-survive <-read_excel("C:\\Users\\DELL\\Desktop\\Eminence.xlsx", sheet = "survival")
-survive <-read_excel("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Eminence.xlsx")
+
+survive <-read_excel("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Eminence.xlsx",
+                     sheet = "survival")
 
 view(survive)
 
@@ -142,7 +143,8 @@ survive %>%
 
 ##################################################################################
 ###################################################################################
-neg_geo <-read_excel("C:\\Users\\DELL\\Desktop\\Eminence.xlsx", sheet = "neg_geotasis(2)")
+neg_geo <-read_excel("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Eminence.xlsx",
+                     sheet = "neg_geotasis(2)")
 view(neg_geo)
 
 neg_geo <- neg_geo %>%
@@ -198,7 +200,8 @@ ng.Ubiaja %>%
 
 #################################################################################
 #################################################################################
-toxicity <-read_excel("C:\\Users\\DELL\\Desktop\\Eminence.xlsx", sheet = "toxicity_test")
+toxicity <-read_excel("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Eminence.xlsx",
+                      sheet = "toxicity_test")
 view(toxicity)
 
 toxicity %>% 
@@ -255,7 +258,8 @@ toxicity %>%
 
 
 ####################################################################################
-suv.2 <- read_excel("C:\\Users\\DELL\\Desktop\\Eminence.xlsx", sheet = "survival2")
+suv.2 <- read_excel("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Eminence.xlsx",
+                    sheet = "survival2")
 view(suv.2)
 
 
