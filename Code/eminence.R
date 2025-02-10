@@ -122,18 +122,18 @@ survive %>%
   as.data.frame() %>% 
   ggplot(aes(x = Clay, y = D7, fill = Treatments)) +
   stat_summary(
-    geom = "bar", 
-    fun = mean, 
-    width = 0.7, 
-    position = position_dodge(0.75)
-  ) +
-  stat_summary(
     geom = "errorbar", 
     fun.data = mean_se, 
     linewidth = 1, 
     width = 0.4, 
     position = position_dodge(0.7),
     color = "black"
+  ) +
+  stat_summary(
+    geom = "bar", 
+    fun = mean, 
+    width = 0.7, 
+    position = position_dodge(0.75)
   ) +
   scale_fill_manual(values = My_colour_choice)+
   labs(x="Clay type",
@@ -157,18 +157,18 @@ neg_geo <- neg_geo %>%
 
 ggplot(aes(x = Clay, y = Geotaxis, fill = Treatment), data= neg_geo) +
   stat_summary(
-    geom = "bar", 
-    fun = mean, 
-    width = 0.7, 
-    position = position_dodge(0.75)
-  ) +
-  stat_summary(
     geom = "errorbar", 
     fun.data = mean_se, 
     linewidth = 1, 
     width = 0.4, 
     position = position_dodge(0.7),
     color = "black"
+  ) +
+  stat_summary(
+    geom = "bar", 
+    fun = mean, 
+    width = 0.7, 
+    position = position_dodge(0.75)
   ) +
   scale_fill_manual(values = My_colour_choice)+
   labs(x="Clay type",
@@ -200,6 +200,61 @@ ng.Ubiaja %>%
 
 #################################################################################
 #################################################################################
+
+new_tox <-read_excel("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Eminence.xlsx",
+                      sheet = "new_toxicity")
+
+new_tox%>% 
+  filter(Clay == "Ubiaja") %>% 
+  group_by(Treatment) %>% 
+  summarise(across(where(is.numeric), mean)) %>% 
+  pivot_longer(
+    cols = -Treatment,
+    names_to = "Days",
+    values_to = "Counts"
+  ) %>% 
+  mutate(Days = as.integer(str_remove(Days, "D"))) %>% 
+  mutate(Treatment= factor(Treatment, 
+                           levels = c("0.1g/ml", "0.5g/ml" ,"1g/ml"))) %>% 
+  as.data.frame() %>% 
+  ggplot(aes(x = Days, y = Counts, colour = Treatment, fill = Treatment)) +
+  geom_point() +
+  geom_smooth(stat = "smooth", se=FALSE)+
+  scale_colour_manual(values = My_colour_choice) +
+  scale_fill_manual(values = My_colour_choice) +
+  scale_x_continuous(breaks = 0:5) +
+  labs(x= "Days", 
+       y= "No. of Deaths",
+       title = "Ubiaja")+
+  theme_light()
+
+
+new_tox %>% 
+  filter(Clay == "Aforma") %>% 
+  group_by(Treatment) %>% 
+  summarise(across(where(is.numeric), mean)) %>% 
+  pivot_longer(
+    cols = -Treatment,
+    names_to = "Days",
+    values_to = "Counts"
+  ) %>% 
+  mutate(Days = as.integer(str_remove(Days, "D"))) %>% 
+  mutate(Treatment= factor(Treatment, 
+                           levels = c("0.1g/ml", "0.5g/ml" ,"1g/ml"))) %>% 
+  as.data.frame() %>% 
+  ggplot(aes(x = Days, y = Counts, colour = Treatment, fill = Treatment)) +
+  geom_point() +
+  stat_smooth(alpha = 0.1, se=FALSE) +   
+  scale_colour_manual(values = My_colour_choice) +
+  scale_fill_manual(values = My_colour_choice) +
+  scale_x_continuous(breaks = 0:5) +
+  labs(x= "Days", 
+       y= "No. of Deaths",
+       title = "Aforma")+
+  theme_light()
+
+
+#################################################################################3
 toxicity <-read_excel("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\Eminence.xlsx",
                       sheet = "toxicity_test")
 view(toxicity)

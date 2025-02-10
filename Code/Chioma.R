@@ -32,13 +32,16 @@ aforma.1 %>%
                linewidth = 1, width= 0.4, color= "black")+
   stat_summary(geom = "bar",fun = mean, width = 0.7)+
   scale_fill_manual(values = My_colour)+
-  labs(title = "PROT",
+  labs(title = " ",
        x= "Treatments",
        y= "Prot g/dL")+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 prot.aov <- aov(Prot~SAMPLE, data = aforma.1)
+prot.lm<-lm(Prot~SAMPLE, data = aforma.1)
+summary(prot.lm)
+
 summary(prot.aov)
 agricolae::HSD.test(prot.aov, trt = c("SAMPLE"),
                     alpha = 0.3, group = TRUE)$groups
@@ -54,7 +57,7 @@ aforma.1 %>%
        x= "Treatments",
        y= "SOD U/g Prot")+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 SOD.aov <- aov(SOD~SAMPLE, data = aforma.1)
 summary(SOD.aov)
@@ -72,7 +75,7 @@ aforma.1 %>%
        x= "Treatments",
        y= "CAT U/g Prot")+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 CAT.aov <- aov(CAT~SAMPLE, data = aforma.1)
 summary(CAT.aov)
