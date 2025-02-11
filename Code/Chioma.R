@@ -41,10 +41,11 @@ aforma.1 %>%
 prot.aov <- aov(Prot~SAMPLE, data = aforma.1)
 prot.lm<-lm(Prot~SAMPLE, data = aforma.1)
 summary(prot.lm)
-
+ 
 summary(prot.aov)
-agricolae::HSD.test(prot.aov, trt = c("SAMPLE"),
-                    alpha = 0.3, group = TRUE)$groups
+prot<-agricolae::HSD.test(prot.aov, trt = c("SAMPLE"),
+                    alpha = 0.3, group = TRUE)
+prot$groups
 
 # SOD
 aforma.1 %>% 
@@ -95,7 +96,7 @@ aforma.1 %>%
        x= "Treatments",
        y= "GPx U/g Prot" )+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 Gpx.aov <- aov(Gpx~SAMPLE, data = aforma.1)
 summary(Gpx.aov)
@@ -114,7 +115,7 @@ aforma.1 %>%
        x= "Treatments",
        y= "MDA mol/g Prot" )+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 MDA.aov <- aov(MDA~SAMPLE, data = aforma.1)
 summary(MDA.aov)
@@ -132,7 +133,7 @@ aforma.1 %>%
        x= "Treatments",
        y=  "GSH ug/mL")+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 GSH.aov <- aov(GSH~SAMPLE, data = aforma.1)
 summary(GSH.aov)
@@ -152,7 +153,7 @@ aforma.1 %>%
        x= "Treatments",
        y=  "GST Activity umol/min/g Prot")+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 GST_Activity.aov <- aov(GST_Activity~SAMPLE, data = aforma.1)
 summary(GST_Activity.aov)
@@ -170,7 +171,7 @@ aforma.1 %>%
        x= "Treatments",
        y=  "H2O2 ug/mL")+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 H2O2.aov <- aov(H2O2~SAMPLE, data = aforma.1)
 summary(H2O2.aov)
@@ -190,7 +191,7 @@ aforma.1 %>%
        x= "Treatments",
        y=  "Nitric Oxide ug/mL" )+
   guides(fill="none")+
-  theme_bw()
+  theme_classic()
 
 Nitric_Oxide.aov <- aov(Nitric_Oxide~SAMPLE, data = aforma.1)
 summary(Nitric_Oxide.aov)
