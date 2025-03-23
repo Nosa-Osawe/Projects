@@ -1,6 +1,5 @@
 library(tidyverse)
-
-
+library(readxl)
 
 # use file.choose() to get the file path...
 
@@ -118,3 +117,105 @@ ggplot(mapping = aes(x= Treatment, y= Values, fill = Treatment ),
   labs(y= "PGHPx Gene Expression")+
   guides(fill="none")+
   theme_classic()
+
+
+
+##################################################################@@@@@@@@@@@@@@@
+
+survive <- read_excel("C:\\Users\\DELL\\Desktop\\samuel.xlsx", sheet = 'survival')
+
+
+survive %>% 
+  group_by(Treatment) %>% 
+  summarise(across(where(is.numeric), mean)) %>% 
+  pivot_longer(
+    cols = -Treatment,
+    names_to = "Days",
+    values_to = "Counts"
+  ) %>% 
+  mutate(Days = as.integer(str_remove(Days, "D"))) %>% 
+  mutate(Treatment= factor(Treatment, 
+                            levels = c("Control","0.025g/ml", "0.05g/ml",
+                                       "0.1g/ml" ))) %>% 
+  as.data.frame() %>% 
+  ggplot(aes(x = Days, y = Counts, colour = Treatment, fill = Treatment)) +
+  geom_point() +
+  stat_smooth(alpha = 0.1) +   
+  scale_colour_manual(values = My_colour_choice) +
+  scale_fill_manual(values = My_colour_choice) +
+  labs( y= "Number of Deaths")+
+  scale_x_continuous(breaks = 0:14) +
+  theme_light()
+
+#######################################################################################
+
+neg_geo <- read_excel("C:\\Users\\DELL\\Desktop\\samuel.xlsx", sheet = 'neg_geo')
+
+neg_geo<- neg_geo %>% 
+  rename(Geotaxis = "Neg_geo(%)") %>%
+  mutate(Treatment= factor(Treatment, 
+                           levels = c("Control","0.025g/ml", "0.05g/ml",
+                                      "0.1g/ml" ))) %>%
+  select(Treatment,T1,T2,T3) %>% 
+  pivot_longer(cols = -1,
+               names_to = "Sessions",
+               values_to = "Values") %>% 
+   mutate(Values= as.numeric(Values*10)) %>% 
+   as.data.frame()
+  
+  
+ggplot(aes(x = Treatment, y = Values, fill = Treatment), data= neg_geo) +
+  stat_summary(
+    geom = "errorbar", 
+    fun.data = mean_se, 
+    linewidth = 1, 
+    width = 0.4, 
+    position = position_dodge(0.7),
+    color = "black"
+  ) +
+  stat_summary(
+    geom = "bar", 
+    fun = mean, 
+    width = 0.7, 
+    position = position_dodge(0.75)
+  ) +
+  scale_fill_manual(values = My_colour_choice)+
+  labs(x="Treatment",
+       y= "Negative Geotaxism (%)")+
+  theme_classic()
+
+
+lmm<- lm(Values~Treatment, data = neg_geo)
+summary(lmm)
+
+neg_geo %>% 
+  group_by(Treatment) %>% 
+  summarise(Mean_neg_geo=mean(Values),
+            Standard_Dev= sd(Values))
+
+
+#####################################################################################
+
+toxicity<-read_excel("C:\\Users\\DELL\\Desktop\\samuel.xlsx", sheet = 'toxicity')
+
+toxicity%>% 
+  group_by(Treatment) %>% 
+  summarise(across(where(is.numeric), mean)) %>% 
+  pivot_longer(
+    cols = -Treatment,
+    names_to = "Days",
+    values_to = "Counts"
+  ) %>% 
+  mutate(Days = as.integer(str_remove(Days, "D"))) %>% 
+  mutate(Treatment= factor(Treatment, 
+                           levels = c("0.1g/ml", "0.5g/ml" ,"1g/ml"))) %>% 
+  as.data.frame() %>% 
+  ggplot(aes(x = Days, y = Counts, colour = Treatment, fill = Treatment)) +
+  geom_point() +
+  geom_smooth(stat = "smooth", se=FALSE)+
+  scale_colour_manual(values = My_colour_choice) +
+  scale_fill_manual(values = My_colour_choice) +
+  scale_x_continuous(breaks = 0:7) +
+  labs(x= "Days", 
+       y= "No. of Deaths")+
+  theme_light()
