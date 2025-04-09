@@ -117,3 +117,24 @@ plot(spe.part.all,
      digits = 2, # only show 2 digits
      cex = 1.5)
 
+# The shared fraction [b] does not represent an interaction effect of 
+# the two explanatory matrices. 
+
+
+# SIGNIFICANT TESTING
+# [a+b] Chemistry without controlling for topography
+anova.cca(rda(spe.hel, env.chem))
+
+# [b+c] Topography without controlling for chemistry
+anova.cca(rda(spe.hel, env.topo))
+
+# [a] Chemistry alone
+anova.cca(rda(spe.hel, env.chem, env.topo))
+
+
+# [c] Topography alone
+anova.cca(rda(spe.hel, env.topo, env.chem))
+
+
+
+
