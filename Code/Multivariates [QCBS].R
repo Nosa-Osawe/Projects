@@ -26,4 +26,94 @@ corrplot(cor(env), method = c("color"), type = "lower",
 # Scale and center env. variables
 env.z <- decostand(env, method = "standardize")
 
+# Run an RDA
+
+
+# will remove 'das', which was correlated with many other variables:
+env.z <- subset(env.z, select = -das)
+# Model the effect of all environmental variables on fish  community composition
+spe.rda <- rda(spe.hel ~ ., data = env.z)
+summary(spe.rda)
+
+# Forward selection of variables:
+fwd.sel <- ordiR2step(rda(spe.hel ~ 1, data = env.z), # lower model limit (simple!)
+                      scope = formula(spe.rda), # upper model limit (the "full" model)
+                      direction = "forward",
+                      R2scope = TRUE, # can't surpass the "full" model's R2
+                      pstep = 1000,
+                      trace = FALSE) # change to TRUE to see the selection process!
+
+# Check the new model with forward-selected variables
+fwd.sel$call
+
+
+# Write our new model
+spe.rda.signif <- rda(spe.hel ~ alt + oxy + dbo, data = env.z)
+# check the adjusted R2 (corrected for the number of
+# explanatory variables)
+RsquareAdj(spe.rda.signif)
+
+#test the significance of each variable
+anova.cca(spe.rda.signif, step = 1000, by = "term")
+anova.cca(spe.rda.signif, step = 1000, by = "axis")
+
+# Type 1 scaling
+ordiplot(spe.rda.signif, scaling = 1, type = "text")
+# Type 2 scaling
+ordiplot(spe.rda.signif, scaling = 2, type = "text")
+
+
+
+## extract % explained by the first 2 axes
+perc <- round(100*(summary(spe.rda.signif)$cont$importance[2, 1:2]), 2)
+
+## extract scores - these are coordinates in the RDA space
+sc_si <- scores(spe.rda.signif, display="sites", choices=c(1,2), scaling=1)
+sc_sp <- scores(spe.rda.signif, display="species", choices=c(1,2), scaling=1)
+sc_bp <- scores(spe.rda.signif, display="bp", choices=c(1, 2), scaling=1)
+
+# I can convert to data frame and make ggplot2, right:
+sc_si <- as.data.frame(sc_si)
+sc_sp <- as.data.frame(sc_sp)
+sc_bp <- as.data.frame(sc_bp)
+
+# Syntax for the partial RDA:
+spe.partial.rda <- rda(spe.hel ~ pH + dur + pho + nit + amm + oxy + dbo + 
+                         # these are the effects we are interested in
+                         Condition(alt + pen + deb), 
+                       # these are the covariates
+                       data = env.z)
+
+summary(spe.partial.rda)
+
+
+# Extract the model's adjusted R2
+RsquareAdj(spe.partial.rda)$adj.r.squared
+
+# Test whether the model is statistically significant
+anova.cca(spe.partial.rda, step = 999)
+
+ordiplot(spe.partial.rda, scaling = 2, 
+         main = "Doubs River partial RDA - Scaling 2")
+
+
+# Variance partitioninig for RDA
+
+# Subset environmental data into topography variables and
+# chemistry variables
+env.topo <- subset(env.z, select = c(alt, pen, deb))
+env.chem <- subset(env.z, select = c(pH, dur, pho, nit, amm,
+                                     oxy, dbo))
+
+
+# Partition the variation in fish community composition
+spe.part.all <- varpart(spe.hel, env.chem, env.topo)
+spe.part.all$part  # access results!
+
+# plot the variation partitioning Venn diagram
+plot(spe.part.all,
+     Xnames = c("Chem", "Topo"), # name the partitions
+     bg = c("seagreen3", "mediumpurple"), alpha = 80, # colour the circles
+     digits = 2, # only show 2 digits
+     cex = 1.5)
 
