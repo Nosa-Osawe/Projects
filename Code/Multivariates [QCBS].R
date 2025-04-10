@@ -1,5 +1,6 @@
 require(vegan)
 require(tidyverse)
+library(MASS)
 require(corrplot)
 
 env <- read.csv("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\doubsenv.csv", 
@@ -135,6 +136,72 @@ anova.cca(rda(spe.hel, env.chem, env.topo))
 # [c] Topography alone
 anova.cca(rda(spe.hel, env.topo, env.chem))
 
+
+spa <- read.csv("C:\\Users\\DELL\\Documents\\Git in R\\Projects\\Data\\doubsspa.csv", 
+                row.names = 1)
+
+spa$site <- 1:nrow(spa)  # add site numbers
+spa <- spa[-8, ]  # remove site 8
+
+# group sites based on latitude
+spa <- spa %>%
+  mutate(group = case_when(
+    y < 82              ~ "1",
+    y > 82 & y < 156    ~ "2",
+    y > 156             ~ "3"
+  ))
+
+# Plot of the latitude
+ggplot(data = spa) +
+  geom_point(aes(x = x, 
+                 y = y, 
+                 colour = as.factor(group)), 
+             size = 4) +
+  labs(color = "Groups", 
+       x = "Longitude", 
+       y = "Latitude") +
+  scale_color_manual(values = c("#3b5896", "#e3548c", "#ffa600")) +
+  theme_classic() + # formatting the plot to make it pretty
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 20),
+        legend.text = element_text(size = 18))
+
+
+# run the LDA grouping sites into latitude groups based on
+# env data
+LDA <- lda(env, spa$group)
+# predict the groupings
+lda.plotdf <- data.frame(group = spa$group, lda = predict(LDA)$x)
+
+# Plot the newly reorganised sites according to the LDA
+ggplot(lda.plotdf) +
+  geom_point(aes(x = lda.LD1, 
+                 y = lda.LD2, 
+                 col = factor(group)), 
+             size = 4) +
+  labs(color = "Groups") +
+  scale_color_manual(values = c("#3b5896", "#e3548c", "#ffa600")) +
+  theme_classic() + # formatting the plot to make it pretty
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 20),
+        legend.text = element_text(size = 18))
+
+# EVALUATING GROUPING ACCURACY
+# Classification of the objects based on the LDA
+spe.class <- predict(LDA)$class
+
+# Posterior probabilities that the objects belong to those
+# groups
+spe.post <- predict(LDA)$posterior
+
+# Table of prior vs. predicted classifications
+(spe.table <- table(spa$group, spe.class))
+
+
+# Proportion of corrected classification
+diag(prop.table(spe.table, 1))
 
 
 
