@@ -203,5 +203,5 @@ spe.post <- predict(LDA)$posterior
 # Proportion of corrected classification
 diag(prop.table(spe.table, 1))
 
-
+##########################################################################
 
