@@ -67,6 +67,8 @@ mpl1 <- glmer(total.fruits ~ nutrient * amd + rack + status +
                 (1 | X) + (1 | popu) + (1 | gen), data = dat.tf, 
               family = "poisson",
               control = glmerControl(optimizer = "bobyqa"))
+
+allFit(mpl1)
 # popu only
 mpl1.popu <- glmer(total.fruits ~ nutrient * amd + rack + status +
                      (1 | X) + (1 | popu), data = dat.tf, family = "poisson",
@@ -94,3 +96,93 @@ coefplot2(mpl1, intercept = TRUE,
 
 summary(mpl1)
 
+data("sleepstudy")
+view(sleepstudy)
+
+
+#########################################################################################
+
+library(MASS)
+
+hist(lice$Menacanthis_straminus)
+hist(lice$Menopon_galinae)
+
+summary(lice$Menacanthis_straminus)
+boxplot(lice$Menacanthis_straminus)
+
+qqnorm(lice$Menacanthis_straminus)
+qqline((lice$Menacanthis_straminus))
+
+shapiro.test(lice$Menacanthis_straminus)
+
+
+#        
+
+attach(lice)
+boxplot (Menacanthis_straminus ~ Location)
+
+model.1 <- lm(Menacanthis_straminus ~ Location, data = lice)
+summary(model.1)
+# Multiple R-squared:  0.0513,	Adjusted R-squared:  0.03678 # AIC: 624.194
+
+model_performance(model.1)
+
+
+model.1.1 <- glm(Menacanthis_straminus ~ Location, data = lice, 
+                 gaussian(link = "identity"))
+model_performance(model.1.1)
+
+
+check_overdispersion(model.1.1)
+check_homogeneity(model.1)
+
+model.2 <- glm(Menacanthis_straminus ~ Location, data = lice, 
+               family =  poisson(link = "log"))
+model_performance(model.2)
+
+
+model.3 <- glm(Menacanthis_straminus ~ Location, data = lice, 
+               family =  quasipoisson(link = "log"))
+model_performance(model.3)
+
+
+
+########################################################################################
+
+require(tidyverse)
+require(readxl)
+library(emmeans)
+library(performance)
+#library(MASS)
+
+hist(lice$Menopon_galinae)
+
+qqnorm(Menopon_galinae)
+qqline(Menopon_galinae)
+
+
+
+model1 <- lm(Menopon_galinae~Location, data = lice)
+summary(model1)
+model_performance(model1)
+check_model(model1)
+
+model2 <- glm(Menopon_galinae~Location, data = lice,
+              family = poisson(link = "log"))
+model_performance(model2)
+
+check_overdispersion(model2)
+
+
+model3 <- glm(Menopon_galinae~Location, data = lice,
+              family = quasipoisson(link = "log"))
+model_performance(model3)
+check_model(model3)
+
+check_overdimodel3check_overdispersion(model3)
+
+
+model4 <- glm.nb(Menopon_galinae~Location, data = lice)
+check_model(model4)
+check_overdispersion(model4)
+model_performance(model4)
