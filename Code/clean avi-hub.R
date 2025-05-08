@@ -34,6 +34,8 @@ dd.month.1 <- W.Enoch%>%
         ) %>%
   ungroup()
 
+# renaming some columns
+
 dd.month.2 <- dd.month.1 %>% 
   select(-c(m1:m12)) %>% 
   rename(DOI_Link = "DOI/Link",
@@ -78,7 +80,23 @@ dd.geo  <- dd.surv %>%
 View(dd.geo)
 
 
+dd.geo %>% 
+  select(Longitude, longitude_clean, Latitude, latitude_clean) %>% 
+  view()
+
+
 unique(dd.geo$Tick_species) %>% 
   sort() %>% 
   view()
+
+unique(dd.geo$Host_SCname) %>% 
+  sort() %>% 
+  view()
+
+dd.geo_final <- dd.geo %>% 
+  select(-survey_period) %>% 
+  as.data.frame() # survey_period is a List, so remove- else won't write.csv
+
+write.csv(x = dd.geo_final, file = "C:\\Users\\DELL\\Desktop\\enoch.csv")
+
 
