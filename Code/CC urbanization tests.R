@@ -1,6 +1,15 @@
 library(effectsize)
 library(performance)
 
+fullDataset = read.csv("https://raw.githubusercontent.com/hurlbertlab/caterpillars-analysis-public/refs/heads/master/data/fullDataset_2025-06-17.csv")
+
+# write.csv(fullDataset, "C:\\Users\\DELL\\Desktop\\ccdata.csv")
+# or locally...
+fullDataset  = read.csv("C:\\Users\\DELL\\Desktop\\ccdata.csv")
+
+
+
+
 minSurveys = 50
 julianWindow = 152:213
 fullDataset %>%
@@ -31,10 +40,10 @@ fullDataset %>%
   filter(julianday %in% julianWindow,
          WetLeaves == 0,
          !Name %in% c('Coweeta - BS', 'Coweeta - BB', 'Coweeta - RK')) %>% 
-  group_by(sciName, ) %>% 
+  group_by(sciName) %>% 
   summarise(count= n()) %>%
   arrange(desc(count)) %>% 
-  View()
+  print(n=25)
 
 fullDataset %>% 
   head(3) %>% 
@@ -49,9 +58,11 @@ dataset %>%
 length(unique(dataset$Name))
 
 goodData %>% 
-  group_by(ObservationMethod) %>% 
+  group_by(ObservationMethod, Name) %>% 
   summarise(count = n(),
-            names.site = n_distinct(Name))
+            names.site = n_distinct(Name)) %>% 
+  arrange(count) %>% 
+  View()
 
 goodData %>% 
   group_by(ObservationMethod) %>% 
@@ -94,6 +105,421 @@ fullDataset %>%
             ant = ifelse(sum(Group == 'ant', na.rm = TRUE) > 0, 1, 0)) %>% 
   View()
 
+ 
+ prop_fullDataset<- fullDataset %>%
+  filter(Name %in% goodSites$Name,
+         julianday %in% julianWindow,
+         WetLeaves == 0,
+         !Name %in% c('Coweeta - BS', 'Coweeta - BB', 'Coweeta - RK')) %>% 
+  group_by(Name, ID, ObservationMethod) %>%
+  summarize(caterpillar = ifelse(sum(Group == 'caterpillar', na.rm = TRUE) > 0, 1, 0),
+            spider = ifelse(sum(Group == 'spider', na.rm = TRUE) > 0, 1, 0),
+            beetle = ifelse(sum(Group == 'beetle', na.rm = TRUE) > 0, 1, 0),
+            truebug = ifelse(sum(Group == 'truebugs', na.rm = TRUE) > 0, 1, 0),
+            hopper = ifelse(sum(Group == 'leafhopper', na.rm = TRUE) > 0, 1, 0),
+            ant = ifelse(sum(Group == 'ant', na.rm = TRUE) > 0, 1, 0)) %>% 
+  group_by(Name, ObservationMethod) %>% 
+  summarise(caterpillar_prop = mean(caterpillar),
+            spider_prop = mean(spider),
+            beetle_prop = mean(beetle),
+            truebug_prop = mean(truebug),
+            hopper_prop  = mean(hopper),
+            ant_prop = mean(ant),
+            Trials = n())  
+ 
+ 
+ prop_dataset = left_join(prop_fullDataset, sites, by = 'Name')
+ 
+ datasetBS = left_join(goodDataBS, sites, by = 'Name')
+ 
+ datasetVis = left_join(goodDataVis, sites, by = 'Name')
+ 
+ datasetACRU = left_join(goodDataACRU, sites, by = 'Name')
+ 
+
+ 
+ 
+ #--------- --- lets make Binomial GLM -------------------------
+ 
+ prop.cat.Dev.Latitude = glm(caterpillar_prop ~ dev*Latitude + ObservationMethod, 
+                        data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.cat.Dev.Latitude)
+ # compare to: summary(cat.Dev.Latitude)
+ 
+ 
+ prop.spi.Dev.Latitude = glm(spider_prop ~ dev*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.spi.Dev.Latitude)
+ 
+ prop.bet.Dev.Latitude = glm(beetle_prop ~ dev*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.bet.Dev.Latitude)
+ 
+ prop.bug.Dev.Latitude = glm(truebug_prop ~ dev*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.bug.Dev.Latitude) # no interaction effect
+ 
+ 
+ prop.hop.Dev.Latitude = glm(hopper_prop ~ dev*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.hop.Dev.Latitude)  
+ 
+
+ 
+ prop.ant.Dev.Latitude = glm(ant_prop ~ dev*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.ant.Dev.Latitude)  
+ 
+ 
+ # ---- viz the binomial GLMs
+ 
+ prop.catDevPlot1<- interact_plot(prop.cat.Dev.Latitude,
+               pred = dev, modx = Latitude,
+               y.label = "Prop. of surveys with caterpillars",
+               x.lab = "% developed cover", cex.lab = 2, vary.lty = FALSE,
+               colors = c('darkblue', 'blue', 'powderblue'
+                          ),
+               line.thickness = 2) +
+   geom_point(data = prop_dataset,
+              aes(x = dev,
+                  y = caterpillar_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),  
+              color = "black",   
+              alpha = 0.5,
+               ) + 
+   scale_shape_manual(values = c(21, 22)) +    
+   scale_fill_manual(values = c("tomato", "yellow")) +   
+   coord_cartesian(ylim = c(0, 0.4))+
+   annotation_raster(catImage, ymin = .3, ymax = .35, xmin = 60, xmax = 100)
+ 
+ 
+ 
+ 
+ prop.spiDevPlot1<- interact_plot(prop.spi.Dev.Latitude,
+                                  pred = dev, modx = Latitude,
+                                  y.label = "Prop. of surveys with spiders",
+                                  x.lab = "% developed cover", cex.lab = 2, vary.lty = FALSE,
+                                  colors = c('darkblue', 'blue', 'powderblue'
+                                  ),
+                                  line.thickness = 2) +
+   geom_point(data = prop_dataset,
+              aes(x = dev,
+                  y = spider_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),  
+              color = "black",   
+              alpha = 0.5,
+   ) + 
+   scale_shape_manual(values = c(21, 22)) +    
+   scale_fill_manual(values = c("tomato", "yellow")) +   
+   coord_cartesian(ylim = c(0, 0.9))+
+   annotation_raster(spiderImage, ymin = .6, ymax = .8, xmin = 20, xmax = 60)
+ 
+ 
+ 
+ 
+ 
+ prop.betDevPlot1<- interact_plot(prop.bet.Dev.Latitude,
+                                  pred = dev, modx = Latitude,
+                                  y.label = "Prop. of surveys with beetles",
+                                  x.lab = "% developed cover", cex.lab = 2, vary.lty = FALSE,
+                                  colors = c('darkblue', 'blue', 'powderblue'
+                                  ),
+                                  line.thickness = 2) +
+   geom_point(data = prop_dataset,
+              aes(x = dev,
+                  y = beetle_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),  
+              color = "black",   
+              alpha = 0.5,
+   ) + 
+   scale_shape_manual(values = c(21, 22)) +    
+   scale_fill_manual(values = c("tomato", "yellow")) +   
+   coord_cartesian(ylim = c(0, 0.9))+
+   annotation_raster(beetleImage, ymin = .6, ymax = .75, xmin = 60, xmax = 100)
+ 
+ 
+ 
+ 
+ 
+ prop.bugDevPlot1<- interact_plot(prop.bug.Dev.Latitude,
+                                  pred = dev, modx = Latitude,
+                                  y.label = "Prop. of surveys with true bugs",
+                                  x.lab = "% developed cover", cex.lab = 2, vary.lty = FALSE,
+                                  colors = c('darkblue', 'blue', 'powderblue'
+                                  ),
+                                  line.thickness = 2) +
+   geom_point(data = prop_dataset,
+              aes(x = dev,
+                  y = truebug_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),  
+              color = "black",   
+              alpha = 0.5,
+   ) + 
+   scale_shape_manual(values = c(21, 22)) +    
+   scale_fill_manual(values = c("tomato", "yellow")) +   
+   coord_cartesian(ylim = c(0, 0.65))+
+   annotation_raster(truebugImage, ymin = .5, ymax = .6, xmin = 25, xmax = 65)
+ 
+ 
+ 
+ 
+ 
+ prop.hopDevPlot1<- interact_plot(prop.hop.Dev.Latitude,
+                                  pred = dev, modx = Latitude,
+                                  y.label = "Prop. of surveys with hopper",
+                                  x.lab = "% developed cover", cex.lab = 2, vary.lty = FALSE,
+                                  colors = c('darkblue', 'blue', 'powderblue'
+                                  ),
+                                  line.thickness = 2) +
+   geom_point(data = prop_dataset,
+              aes(x = dev,
+                  y = hopper_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),  
+              color = "black",   
+              alpha = 0.5,
+   ) + 
+   scale_shape_manual(values = c(21, 22)) +    
+   scale_fill_manual(values = c("tomato", "yellow")) +   
+   coord_cartesian(ylim = c(0, 0.65))+
+   annotation_raster(hopperImage, ymin = .5, ymax = .64, xmin = 20, xmax = 60)
+ 
+ 
+ 
+ prop.antDevPlot1<- interact_plot(prop.ant.Dev.Latitude,
+                                  pred = dev, modx = Latitude,
+                                  y.label = "Prop. of surveys with ants",
+                                  x.lab = "% developed cover", cex.lab = 2, vary.lty = FALSE,
+                                  colors = c('darkblue', 'blue', 'powderblue'
+                                  ),
+                                  line.thickness = 2) +
+   geom_point(data = prop_dataset,
+              aes(x = dev,
+                  y = ant_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),  
+              color = "black",   
+              alpha = 0.5,
+   ) + 
+   scale_shape_manual(values = c(21, 22)) +    
+   scale_fill_manual(values = c("tomato", "yellow")) +   
+   coord_cartesian(ylim = c(0, 0.7))+
+   annotation_raster(antImage, ymin = .6, ymax = .7, xmin = 20, xmax = 55)
+ 
+ 
+ ggarrange(prop.catDevPlot1, prop.spiDevPlot1, prop.betDevPlot1,
+           prop.bugDevPlot1, prop.hopDevPlot1, prop.antDevPlot1, 
+           ncol=3, nrow=2, common.legend = TRUE, legend="bottom")
+ 
+ 
+ 
+ 
+ 
+ # Check what is going on with forest covers
+
+ 
+ 
+ 
+ prop.cat.For.Latitude = glm(caterpillar_prop ~ forest*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.cat.For.Latitude)
+ 
+ 
+ prop.spi.For.Latitude = glm(spider_prop ~ forest*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.spi.For.Latitude)
+ 
+ prop.bet.For.Latitude = glm(beetle_prop ~ forest*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.bet.For.Latitude)
+ 
+ prop.bug.For.Latitude = glm(truebug_prop ~ forest*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.bug.For.Latitude)  
+ 
+ 
+ prop.hop.For.Latitude = glm(hopper_prop ~ forest*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.hop.For.Latitude)  
+ 
+ 
+ prop.ant.For.Latitude = glm(ant_prop ~ forest*Latitude + ObservationMethod, 
+                             data = prop_dataset, weights = Trials,  family = "binomial")
+ summary(prop.ant.For.Latitude)  
+ 
+ 
+ 
+ 
+ # PLOTS
+ 
+ 
+ 
+ 
+ prop.CatForPlot1 <- interact_plot(prop.cat.For.Latitude,
+               pred = forest, modx = Latitude,
+               y.label = "Prop. of surveys with caterpillars",
+               x.lab = "% forest cover",   
+               cex.lab = 2,
+               vary.lty = FALSE,
+               line.thickness = 2) +
+   scale_color_gradient(low = "darkgreen", high = "lightgreen")+
+   geom_point(data = prop_dataset,
+              aes(x = forest,
+                  y = caterpillar_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),
+              color = "black",
+              alpha = 0.5) +
+   scale_shape_manual(values = c(21, 22)) +
+   scale_fill_manual(values = c("tomato", "yellow")) +
+   coord_cartesian(ylim = c(0, 0.4)) +
+   annotation_raster(catImage, ymin = .3, ymax = .35, xmin = 60, xmax = 100)
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ prop.SpiForPlot1<- interact_plot(prop.spi.For.Latitude,
+                                  pred = forest, modx = Latitude,
+                                  y.label = "Prop. of surveys with spiders",
+                                  x.lab = "% forest cover",   
+                                  cex.lab = 2,
+                                  vary.lty = FALSE,
+                                  line.thickness = 2) +
+   scale_color_gradient(low = "darkgreen", high = "lightgreen")+
+   geom_point(data = prop_dataset,
+              aes(x = forest,
+                  y = spider_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),
+              color = "black",
+              alpha = 0.5) +
+   scale_shape_manual(values = c(21, 22)) +
+   scale_fill_manual(values = c("tomato", "yellow")) +
+   coord_cartesian(ylim = c(0, 0.8)) +
+   annotation_raster(spiderImage, ymin = .6, ymax = .8, xmin = 60, xmax = 95)
+ 
+ 
+ 
+ prop.BetForPlot1<- interact_plot(prop.bet.For.Latitude,
+                                  pred = forest, modx = Latitude,
+                                  y.label = "Prop. of surveys with beetles",
+                                  x.lab = "% forest cover",   
+                                  cex.lab = 2,
+                                  vary.lty = FALSE,
+                                  line.thickness = 2) +
+   scale_color_gradient(low = "darkgreen", high = "lightgreen")+
+   geom_point(data = prop_dataset,
+              aes(x = forest,
+                  y = beetle_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),
+              color = "black",
+              alpha = 0.5) +
+   scale_shape_manual(values = c(21, 22)) +
+   scale_fill_manual(values = c("tomato", "yellow")) +
+   coord_cartesian(ylim = c(0, 0.9))+
+   annotation_raster(beetleImage, ymin = .6, ymax = .75, xmin = 60, xmax = 90)
+ 
+ 
+ 
+ prop.BugForPlot1<- interact_plot(prop.bug.For.Latitude,
+                                  pred = forest, modx = Latitude,
+                                  y.label = "Prop. of surveys with true bugs",
+                                  x.lab = "% forest cover",   
+                                  cex.lab = 2,
+                                  vary.lty = FALSE,
+                                  line.thickness = 2) +
+   scale_color_gradient(low = "darkgreen", high = "lightgreen")+
+   geom_point(data = prop_dataset,
+              aes(x = forest,
+                  y = truebug_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),
+              color = "black",
+              alpha = 0.5) +
+   scale_shape_manual(values = c(21, 22)) +
+   scale_fill_manual(values = c("tomato", "yellow")) +
+   coord_cartesian(ylim = c(0, 0.65))+
+   annotation_raster(truebugImage, ymin = .5, ymax = .6, xmin = 25, xmax = 65)
+ 
+ 
+ 
+ 
+ 
+ 
+ prop.HopForPlot1<- interact_plot(prop.hop.For.Latitude,
+                                  pred = forest, modx = Latitude,
+                                  y.label = "Prop. of surveys with hopper",
+                                  x.lab = "% forest cover",   
+                                  cex.lab = 2,
+                                  vary.lty = FALSE,
+                                  line.thickness = 2) +
+   scale_color_gradient(low = "darkgreen", high = "lightgreen")+
+   geom_point(data = prop_dataset,
+              aes(x = forest,
+                  y = hopper_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),
+              color = "black",
+              alpha = 0.5) +
+   scale_shape_manual(values = c(21, 22)) +
+   scale_fill_manual(values = c("tomato", "yellow")) +
+   coord_cartesian(ylim = c(0, 0.65))+
+   annotation_raster(hopperImage, ymin = .5, ymax = .64, xmin = 20, xmax = 60)
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ prop.AntForPlot1<- interact_plot(prop.ant.For.Latitude,
+                                  pred = forest, modx = Latitude,
+                                  y.label = "Prop. of surveys with ants",
+                                  x.lab = "% forest cover",   
+                                  cex.lab = 2,
+                                  vary.lty = FALSE,
+                                  line.thickness = 2) +
+   scale_color_gradient(low = "darkgreen", high = "lightgreen")+
+   geom_point(data = prop_dataset,
+              aes(x = forest,
+                  y = ant_prop,
+                  size = Trials,
+                  shape = ObservationMethod,
+                  fill = ObservationMethod),
+              color = "black",
+              alpha = 0.5) +
+   scale_shape_manual(values = c(21, 22)) +
+   scale_fill_manual(values = c("tomato", "yellow")) +
+   coord_cartesian(ylim = c(0, 0.7))+
+   annotation_raster(antImage, ymin = .6, ymax = .7, xmin = 55, xmax = 85)
+ 
+ 
+ 
+ ggarrange(prop.CatForPlot1, prop.SpiForPlot1, prop.BetForPlot1,
+           prop.BugForPlot1, prop.HopForPlot1, prop.AntForPlot1, 
+           ncol=3, nrow=2, common.legend = TRUE, legend="bottom")
+ 
+ 
+ 
 # -------------------------  Fagus grandifolia------------------------
 goodDataFAGR = fullDataset %>%
   filter(julianday %in% julianWindow,
